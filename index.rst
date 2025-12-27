@@ -29,13 +29,24 @@
 
    analyses/jg_overview
 
+.. toctree::
+   :caption: Transformations
+   :maxdepth: 1
+   :hidden:
+
+   transformations/tr_overview
+   transformations/tr_z_scores
+   transformations/tr_norm
+   transformations/tr_sqr_rt
+   transformations/tr_log_10
+   transformations/tr_nat_log  
+
 
 .. toctree::
    :caption: How to…
    :hidden:
 
    howto/howto_overview
-
 
 .. toctree::
    :caption: Developer hub
