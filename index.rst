@@ -29,6 +29,14 @@
 
    analyses/jg_overview
 
+.. toctree::
+   :caption: Transformations
+   :maxdepth: 1
+   :hidden:
+
+   transformations/tr_overview 
+   transformations/tr_z_scores
+
 
 .. toctree::
    :caption: How to…
