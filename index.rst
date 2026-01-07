@@ -34,12 +34,14 @@
    :maxdepth: 1
    :hidden:
 
-   transformations/tr_overview
-   transformations/tr_z_scores
-   transformations/tr_norm
-   transformations/tr_sqr_rt
-   transformations/tr_log_10
-   transformations/tr_nat_log  
+   transformtions/tr_overview
+   .. transformations/tr_overview
+   .. transformations/tr_z_scores
+   .. transformations/tr_norm
+   .. transformations/tr_sqr_rt
+   .. transformations/tr_log_10
+   .. transformations/tr_nat_log  
+   .. transformations/tr_multi_cols
 
 
 .. toctree::
