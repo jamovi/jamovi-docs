@@ -1,7 +1,7 @@
 .. sectionauthor:: Laiton Hedley 
 
 ==========================
-sqaure root transformation
+Square Root Transformation
 ==========================
 
 -  | .

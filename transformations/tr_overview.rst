@@ -1,69 +1,104 @@
 .. sectionauthor:: Laiton Hedley 
 
 =========================
-Transformations Overview
+Data Manipulation and Transformations Overview
 =========================
-   The aim of this section is to provide users a short guide on conducting common data transformations in jamovi.
-   This guide is designed for users who understand the below data transformations but are unsure how to perform them using the jamovi software.
-   Below we provide a brief description of each transformation with links to the step-by-step documentation to perform each (external information can be accessed by clicking on the name of each transformation).
+   The aim of this section is to provide users a short overview of the common data manipulations and transformations avaialble in jamovi.
+   This documentation is designed for users who understand their desired manipulation or transformation but are unsure how to perform them using the jamovi software.
+   It is assumed that you have already loaded your data into jamovi. If you are unsure how to do this, `here <https://docs.jamovi.org/_pages/um_2_first-steps.html>`_ for help.
+   
+==================================================================================================
+Transformations: Which one should I use? ``New Computed Variable`` vs ``New Transformed Variable``
+==================================================================================================
 
-z-score Transformation
-----------------------
-    In short, a `z-score <https://en.wikipedia.org/wiki/Standard_score>`_ is the number of standard deviations a raw value is from the overall mean of the variable being measured.
-    The z-score transformation standardises your variable, so it has a mean of 0 and a standard deviation of 1.
-    Calculating a z-score is useful for comparing variables measured on different scales and for identifying outliers in your data.
-    Thankfully jamovi has made z-score transformations for an entire column of data a seamless process, for a step-by-step guide see :doc:`here <tr_z_scores>`.
-    
+   In jamovi there are two routes to perform a data transformation, if you click on a blank column (or row of a blank column header), you will see above your spread sheet a few options including ``New Computed Variable`` and ``New Transformed Variable`` (the ``New Data Variable`` option allows you to manually input data which we will ignore for now).
+   The ``New Computed Variable`` option is best chosen when you're seeking to apply a transformation to a single variable, whereas the ``New Transformed Variable`` option is more suited for applying transformations (and perhaps more complex ones) to multiple variables simultaneously. 
+   You would likely prefer to use the ``New Transformed Variable`` option when you have a complex transformation that you'd like to apply to several columns of data. 
+   This is made possible because the ``New Transformed Variable`` option also allows for the use of "if then" statements to create more complex transformations and avoid errors. 
+   For example, perhaps you would like to apply a logarithmic transformation but want to avoid errors such as attempting to take the logarithm of negative numbers or zero. 
+   You could embed an if else statements to avoid taking the logarithm of zeros and recode negative numbers to missing values.
+   While it is possible to use the ``New Computed Variable`` option to create similar complex transformations, it can be more time consuming if you have many variables to transform. 
+   
+   Generally, applying transformations using either way is similar for both options with a minor difference.
+   For example, if you wanted to apply a logarithmic 10 transformation to your data, both methods would simply involve calling the `LOG10`` function into the formula editor.
+   The difference lies within how you 'call' your `variable` in the formula editor.
+   For example, using ``New Computed Variable`` you would simply use the column name of variable, so if your variable is called `score`, you would place the function as `LOG10(score)`.
+   In contrast, using ``New Transformed Variable`` you would need instead `$SOURCE` to call the variable, so to apply the same transformation you would call the function as `LOG10($SOURCE)`.
+   More information on both the ``New Computed Variable`` and ``New Transformed Variable`` options can be found `here <https://docs.jamovi.org/_pages/um_4_spreadsheet.html>`_ 
+   With that out of the way, let's explore some of the common data transformations available in jamovi! 
 
-Normalisation Transformation (Min-Max Scaling)
-----------------------------------------------
-    A `Normalisation <https://towardsai.net/p/machine-learning/a-practical-walkthrough-of-min-max-scaling>`_ transformation (or Min-Max Scaling) rescales the values of a variable to a specified range, typically between 0 and 1. 
-    By doing so, the minimum value of the variable becomes 0, and the maximum value becomes 1, with all other values proportionally adjusted within this range.
-    This transformation is useful when you want to ensure that all variables are on the same scale and to improve interpretability of the data. 
-    Normalisation transformations can be easily performed in jamovi, see :doc:`here <tr_norm>`.
+=============================================
+Placeholder Heading Transformation Table..... 
+=============================================
++-------------------+-------------------+-------------------+-------------------+
+| Transformation    | Definition        | function          | Example           |
++===================+===================+===================+===================+
+| z-score           | wewetwetwetwetwetwetewt       | Row 1 Col 3       | Row 1 Col 4       |
++-------------------+-------------------+-------------------+-------------------+
+| Row 2 Col 1       | Row 2 Col 2       | Row 2 Col 3       | Row 2 Col 4       |
++-------------------+-------------------+-------------------+-------------------+
+| Row 3 Col 1       | Row 3 Col 2       | Row 3 Col 3       | Row 3 Col 4       |
++-------------------+-------------------+-------------------+-------------------+
+| Row 4 Col 1       | Row 4 Col 2       | Row 4 Col 3       | Row 4 Col 4       |
++-------------------+-------------------+-------------------+-------------------+
+| Row 5 Col 1       | Row 5 Col 2       | Row 5 Col 3       | Row 5 Col 4       |
++-------------------+-------------------+-------------------+-------------------+
+| Row 6 Col 1       | Row 6 Col 2       | Row 6 Col 3       | Row 6 Col 4       |
++-------------------+-------------------+-------------------+-------------------+
+| Row 7 Col 1       | Row 7 Col 2       | Row 7 Col 3       | Row 7 Col 4       |
++-------------------+-------------------+-------------------+-------------------+
+| Row 8 Col 1       | Row 8 Col 2       | Row 8 Col 3       | Row 8 Col 4       |
++-------------------+-------------------+-------------------+-------------------+
+| Row 9 Col 1       | Row 9 Col 2       | Row 9 Col 3       | Row 9 Col 4       |
++-------------------+-------------------+-------------------+-------------------+
+| Row 10 Col 1      | Row 10 Col 2      | Row 10 Col 3      | Row 10 Col 4      |
++-------------------+-------------------+-------------------+-------------------+
+| Row 11 Col 1      | Row 11 Col 2      | Row 11 Col 3      | Row 11 Col 4      |
++-------------------+-------------------+-------------------+-------------------+
+| Row 12 Col 1      | Row 12 Col 2      | Row 12 Col 3      | Row 12 Col 4      |
++-------------------+-------------------+-------------------+-------------------+
+| Row 13 Col 1      | Row 13 Col 2      | Row 13 Col 3      | Row 13 Col 4      |
++-------------------+-------------------+-------------------+-------------------+
+| Row 14 Col 1      | Row 14 Col 2      | Row 14 Col 3      | Row 14 Col 4      |
++-------------------+-------------------+-------------------+-------------------+
+| Row 15 Col 1      | Row 15 Col 2      | Row 15 Col 3      | Row 15 Col 4      |
++-------------------+-------------------+-------------------+-------------------+
+| Row 16 Col 1      | Row 16 Col 2      | Row 16 Col 3      | Row 16 Col 4      |
++-------------------+-------------------+-------------------+-------------------+
+| Row 17 Col 1      | Row 17 Col 2      | Row 17 Col 3      | Row 17 Col 4      |
++-------------------+-------------------+-------------------+-------------------+
+| Row 18 Col 1      | Row 18 Col 2      | Row 18 Col 3      | Row 18 Col 4      |
++-------------------+-------------------+-------------------+-------------------+
+| Row 19 Col 1      | Row 19 Col 2      | Row 19 Col 3      | Row 19 Col 4      |
++-------------------+-------------------+-------------------+-------------------+
+| Row 20 Col 1      | Row 20 Col 2      | Row 20 Col 3      | Row 20 Col 4      |
++-------------------+-------------------+-------------------+-------------------+
 
-Square Root Transformation
---------------------------
-   A `Square Root <https://en.wikipedia.org/wiki/Square_root>`_ transformation involves taking the square root of a value.
-   This transformation is often used on non-negative count data to reduce right skewness, stabilise variance, and ensure the data is normally distributed. 
-   Square root transformations can be done easily in jamovi, see :doc:`here <tr_sqr_rt>` for the step-by-step guide.
-
-Logarithmic 10 Transformation
---------------------------
-    `Logarithmic 10 <https://doi.org/10.1177/00045632211050531>`_ (or log10) transformation involves taking the logarithm of each value in a dataset to compress large numbers and expand small numbers.
-    We may use a logarithmic 10 transformation to reduce right skewness, stabilise variance, make data more normally distributed, reduce the influence of outliers, and compress data with a wide range.
-    Logarithmic transformations are particularly useful for data that spans several orders of magnitude or has an exponential growth pattern.
-    Jamovi makes peforming logarithmic transformations easy, see here :doc:`here <tr_log_10>` for the step-by-step guide.
 
 
-Natural Logarithmic Transformation 
-----------------------------------
-    A `Natural Logarithmic <https://doi.org/10.1177/00045632211050531>`_ (or ln) transformation involves taking the natural logarithm (base e) of each value in a dataset. 
-    Similar to the logarithmic 10 transformations, natural logarithmic transformations are used to reduce right skewness, stabilise variance, and make data more normally distributed.
-    Natural logarithmic transformations are also useful for data that grows exponentially or spans several orders of magnitude.
-    For a step-by-step guide on how to perform a natural logarithmic transformation in jamovi, see :doc:`here <tr_nat_log> `.
+.. list-table:: Transformations Summary
+   :header-rows: 1
+
+   * - Transformation
+     - Definition
+     - 
+   * - Alice
+     - 29
+     - Analyst
+   * - Bob
+     - 34
+     - Engineer
 
 
-Exponential Transformation 
----------------------------
-    Placeholder information 
 
 
-Absolute Transformation
----------------------------
-    Placeholder information
 
 
-Box-Cox Transformation
-----------------------
-    Placeholder information
 
 
-Quadratic Transformation
-------------------------
-    Placeholder information
 
-    
+
+
 ----------------------
 
 
@@ -74,10 +109,6 @@ Quadratic Transformation
 
 .. toctree::
    :maxdepth: 1
-    tr_z_scores
-    tr_norm
-    tr_sqr_rt
-    tr_log_10
-    tr_nat_log
+   
 
 .. ----------------------------------------------------------------------------
