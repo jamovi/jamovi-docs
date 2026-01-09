@@ -30,7 +30,7 @@
    analyses/jg_overview
 
 .. toctree::
-   :caption: Transformations
+   :caption: Manipulate and Transform Data
    :maxdepth: 1
    :hidden:
  
