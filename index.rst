@@ -29,13 +29,18 @@
 
    analyses/jg_overview
 
+.. toctree::
+   :caption: Manipulate and Transform Data
+   :maxdepth: 1
+   :hidden:
+ 
+   transformations/tr_overview
 
 .. toctree::
    :caption: How to…
    :hidden:
 
    howto/howto_overview
-
 
 .. toctree::
    :caption: Developer hub
