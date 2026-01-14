@@ -8,8 +8,6 @@ Overview
 
     The following describes the various data manipulation and transformation facilities that jamovi provides.
 
-
-
 ==================
 Computed Variables
 ==================
@@ -26,7 +24,7 @@ Computed Variables
 
     The simplest way to add a new computed variable to a data set is to select the ``Add`` (variable) button from the ``Data`` tab. Selecting ``Append`` under ``Computed variables`` will add a new computed column to the very right of the data set. To configure the computed variable, select either ``Setup`` from the ``Data`` tab, or double click on the column header. This will present you with the variable editor which looks as follows (for computed variables).
 
-    ** screenshot **
+    |computed_screenshot| 
 
     Here you can name the new column, and add a description if you desire. Selecting the small fx button will bring down a list of the functions available, and a list of variables you can use to compose your formula. It's possible to construct your formula simply by typing directly into the formula box, or by selecting the formulas and variables from the lists and double-clicking them to insert them.
 
@@ -38,7 +36,74 @@ Computed Variables
 Transformed Variables
 =====================
 
-    ``Transformed variables`` are better suited for more complex transformations (such as recoding) and allow the same transform to be applied across multiple columns of data.
+    ``Transformed variables`` are better suited for more complex transformations (such as reverse scoring and recoding variables) and allow the same transform to be applied across multiple columns of data.
+    To add a new computed variable to a data set is to select the ``Add`` (variable) button from the ``Data`` tab.  Under ``Transformed Variable`` select ``Append``, this will add a new Transformed column to the very right of the data set. To configure the Transformed variable, select either ``Setup`` from the ``Data`` tab, or double click on the column header. This will present you with the variable editor which looks like this:
+
+    |Transformed_Variable|
+
+    Here you can name the new column, and add a description of the transformation - this can be helpful if you wish to use the same transformation again. You must also select a ``Source variable``, which is the column of data you wish to manipulate or transform. 
+    Additionally, you must select ``using transform``, which allows you to either select an existing transformation, or create a new one by selecting ``Create New Transform...``. 
+    When creating a new transformation, you will be presented with a formula editor (like the computed variables option). 
+    Here you can enter the formula for your transformation, using the ``$SOURCE`` variable to refer to the source variable you selected earlier.
+    
+    For example, we may have a survey item that needs to be reversed score, using the ``New Transformed Variable`` option, you could create a new transformation with the formula:
+       ``7 - $SOURCE`` 
+    
+    In this example, ``$SOURCE`` would be item_3 and we are assuming a 6-point Likert scale (hence the 7 minus):
+  
+    |Reverse_Score| 
+
+    We should yield results where 6 becomes 1, 5 becomes 2, 4 becomes 3, and so on:
+
+    .. list-table:: Example of Reverse Scoring
+       :header-rows: 1
+
+       * - Item_1
+         - Item_2
+         - Item_3
+         - 7 - $SOURCE
+       * - 4
+         - 3
+         - 3
+         - 4
+       * - 3
+         - 4
+         - 6
+         - 1
+       * - 4
+         - 4
+         - 2
+         - 5
+        
+    Once created, this transformation can be applied to any number of items (such as items_1, items_2, and so on) by selecting the transformation from the ``using transform`` dropdown menu. 
+    This can be a real time saver when you have many columns to transform in the same way.
+
+    The Transformed variable`` option is also ideal for recoding variables using "if-then" logic. 
+    After clicking ``Create New Transform...`` and then clicking on the ``Add recode condition`` button next to the plus sign , you can specify the criteria for recoding your variable.
+    This can be useful if you wish to turn a continuous variable into discrete categories (or collapse discrete categories into smaller groupings of discrete categories).
+
+    For example, perhaps you have a column of data indicating continous scores on exam performance, and you wish to recode these into letter grades (HD, D, C, P, F).
+    You could use the recode conditions to specify the following:
+
+    |Recode_Variable| 
+
+    And of course adding the additional if then statements for the C and P grades you may get the following recoded variable:
+
+    .. list-table:: Example of Recoding
+       :header-rows: 1
+
+       * - Exam Score
+         - Grade
+       * - 50
+         - P
+       * - 90
+         - HD
+       * - 44
+         - F
+       * - 76
+         - D
+       * - 66
+         - C
 
 ..     Although both approaches can achieve similar outcomes, there are two key differences.
 ..     First is how you refer to the variable (i.e., the column of data) you would like to manipulate or transform. For example, when applying a base-10 logarithmic transformation, both methods use the `LOG10` function.
@@ -116,7 +181,48 @@ It's possible to combine Row and V functions together. For example, to compute a
 
 (but it's also possible to use the more concise ``Z(...)`` function!)
 
-*explain group_by*
+The Group by or rather ``group_by`` argument should be called within V-Functions to calculate a desired statistic within groups of data.
+Perhaps you have a dataset with a column labelled Dosage to indicate the treatment each participant recieved, say 50mgs vs 100mgs vs 150mgs.
+You'd likely wish to compute the mean score of some outcome variable for each Dosage group separately (without the scores from one treatment being combined with those from another). 
+This is made possible by calling the VMEAN function with the ``group_by`` argument: 
+
+  ``VMEAN(outcome, group_by = Dosage)``
+
+
+.. list-table:: Example of the VMEAN() Function with group_by argument
+   :header-rows: 1
+
+   * - Dosage
+     - outcome
+     - VMEAN(outcome, group_by = Dosage)
+   * - 150mgs
+     - 4
+     - 4.33
+   * - 150mgs
+     - 4
+     - 4.33
+   * - 150mgs
+     - 5
+     - 4.33
+   * - 100mgs
+     - 3
+     - 3
+   * - 100mgs
+     - 2
+     - 3
+   * - 100mgs
+     - 4
+     - 3
+   * - 50mgs
+     - 1
+     - 1.33
+   * - 50mgs
+     - 2
+     - 1.33
+   * - 50mgs
+     - 1
+     - 1.33
+
 
 ====================
 ⚡ List of Functions
@@ -129,17 +235,60 @@ It's possible to combine Row and V functions together. For example, to compute a
      - Description
      -
    * - ``Z(var)``
-     - z-score
-     - `More info <https://en.wikipedia.org/wiki/Standard_score>`_
+     - z-score: the number of standard deviations a raw value is from the overall mean. 
+     - `More info <https://en.wikipedia.org/wiki/Standard_score>`__
    * - ``SCALE(var)``
      - synonym for ``Z()``
-     -
+     - 
    * - ``LN(var)``
-     - Natural logarithm (base *e*)
-     - `More info <https://doi.org/10.1177/00045632211050531>`_
+     - Natural logarithm (base *e*): the natural logarithm (base e) of each value in a column of data. 
+     - `More info <https://doi.org/10.1177/00045632211050531>`__
    * - ``LOG10(var)``
-     - Log base 10
-     - `More info <https://doi.org/10.1177/00045632211050531>`_
+     - Log base 10: the logarithm (base 10) of each value in a column of data.
+     - `More info <https://doi.org/10.1177/00045632211050531>`__
+   * - ``SQRT(var)``
+     - Square root: the square root of each value in a column of data.
+     - `More info <https://en.wikipedia.org/wiki/Square_root>`__  
+   * - ``EXP(var)``
+     - Exponential: raises *e* to the power of each value in a column of data.
+     - `More info <https://en.wikipedia.org/wiki/Exponential_function>`__
+   * - ``ABS(var)``
+     - Absolute value: converts all negative values in a column of data to their positive counterparts, while leaving positive values unchanged.
+     - `More info <https://en.wikipedia.org/wiki/Absolute_value>`__  
+   * - ``ROUND(var, n)``
+     - Rounding: adjusts each value in a column of data to a specified number of decimal places or to the nearest whole number.
+     - `More info <https://en.wikipedia.org/wiki/Rounding>`__  
+   * - ``RANK(var)``
+     - Ranking: assigns an ordinal rank to each value in a column of data based on its position relative to other values.
+     - `More info <https://en.wikipedia.org/wiki/Ranking_(statistics)>`__  
+   * - ``FLOOR(var)``
+     - Floor: returns the greatest integer that is less than each value in a column of data, effectively rounding down to the nearest whole number.
+     - `More info <https://en.wikipedia.org/wiki/Floor_and_ceiling_functions>`__  
+   * - ``CEILING(var)``
+     - Ceiling: returns the smallest integer that is greater than or equal to each value in a column of data, effectively rounding up to the nearest whole number.
+     - `More info <https://en.wikipedia.org/wiki/Floor_and_ceiling_functions>`__  
+   * - ``MIN(var)``
+     - Minimum: identifies the lowest value in a row or column of data.
+     - `More info <https://en.wikipedia.org/wiki/Maximum_and_minimum>`__
+   * - ``MAX(var)``
+     - Maximum: identifies the highest value in a row or column of data.
+     - `More info <https://en.wikipedia.org/wiki/Maximum_and_minimum>`__
+   * - ``STDEV(var1, var2, ...)``
+     - Standard deviation: measures the amount of variation in a set of values.
+     - `More info <https://en.wikipedia.org/wiki/Standard_deviation>`__
+   * - ``SUM(var1, var2, ...)``
+     - Summation: calculates the total of items (or columns of data) by adding them together.
+     - `More info <https://en.wikipedia.org/wiki/Summation>`__ 
+   * - ``MEAN(var1, var2, ...)``
+     - Participant Mean: Calculates the mean score across multiple variables for each participant or row of data.
+     - `More info <https://en.wikipedia.org/wiki/Mean>`__  
+  
+
+
+
+
+
+
 
 ==============
 Filtering Data
@@ -313,7 +462,8 @@ String concatenation
 
 ..     More information on both the ``New Computed Variable`` and ``New Transformed Variable`` options can be found `here <https://docs.jamovi.org/_pages/um_4_spreadsheet.html>`_.
 ..     For additional information on the ``New Transformed Variable`` option (especially for transforming multiple variables), see this `blog post <https://blog.jamovi.org/index.php/2021/08/12/transforming-multiple-variables-in-jamovi/>`_.
-..     With that out of the way, below are more details on the common manipulations and transformations made accessible in jamovi.
+..     With that out of the way,
+ below are more details on the common manipulations and transformations made accessible in jamovi.
 
 .. ===========================================================
 .. Common Data Manipulations and Transformations using jamovi
@@ -345,3 +495,26 @@ String concatenation
 
 
 .. ----------------------------------------------------------------------------
+
+
+.. |computed_screenshot| image:: ../_images/tr_compute_variable.png
+  :alt: Example transformation variable editor using the computed variable option.
+  :class: centered
+  :width: 37%
+
+.. |Reverse_Score| image:: /_images/tr_reverse_score_likert.png
+  :alt: How to reverse score a likert item using the transformed variable option.
+  :class: centered
+  :width: 37%
+
+    
+.. |Transformed_Variable| image:: /_images/tr_transformed_variable.png
+  :alt: Example transformation variable editor using the transformed variable option.
+  :class: centered
+  :width: 37%
+
+
+.. |Recode_Variable| image:: /_images/tr_transform_recode.png
+  :alt: How to recode a variable using the transformed variable option.
+  :class: centered
+  :width: 37%
