@@ -8,6 +8,17 @@ Overview
 
     The following describes the various data manipulation and transformation facilities that jamovi provides.
 
+==============
+Data Variables
+==============
+
+    - Setting data type and measure type
+    - Missing values
+    - Adding labels to levels
+    - Reordering levels
+    - 'Retain unused levels in analyses'
+    - Some existing content https://www.jamovi.org/user-manual.html#data-variables
+
 ==================
 Computed Variables
 ==================
@@ -28,7 +39,7 @@ Computed Variables
 
     Here you can name the new column, and add a description if you desire. Selecting the small fx button will bring down a list of the functions available, and a list of variables you can use to compose your formula. It's possible to construct your formula simply by typing directly into the formula box, or by selecting the formulas and variables from the lists and double-clicking them to insert them.
 
-    A number of functions are available. *link to Available Functions*
+    A number of functions are available. See :ref:`list-of-functions` for details.
 
     Computed variables are ideal for one-off computations, but where the same computation needs to be applied many times across many columns (For example, reverse scoring a number of responses), creating a computed variable for each column becomes tedious. In contrast, ``Transformed variables`` allow for the same transform to be applied across any number of columns. Further, transformed variables are ideal for "if-then" recoding of variables.
 
@@ -37,21 +48,20 @@ Transformed Variables
 =====================
 
     ``Transformed variables`` are better suited for more complex transformations (such as reverse scoring and recoding variables) and allow the same transform to be applied across multiple columns of data.
-    To add a new computed variable to a data set is to select the ``Add`` (variable) button from the ``Data`` tab.  Under ``Transformed Variable`` select ``Append``, this will add a new Transformed column to the very right of the data set. To configure the Transformed variable, select either ``Setup`` from the ``Data`` tab, or double click on the column header. This will present you with the variable editor which looks like this:
+    To add a new transformed variable to a data set, select the ``Add`` (variable) button from the ``Data`` tab.  Under ``Transformed Variable`` select ``Append``, this will add a new Transformed column to the very right of the data set. To configure the Transformed variable, select either ``Setup`` from the ``Data`` tab, or double click on the column header. This will present you with the variable editor which looks like this:
 
     |Transformed_Variable|
 
-    Here you can name the new column, and add a description of the transformation - this can be helpful if you wish to use the same transformation again. You must also select a ``Source variable``, which is the column of data you wish to manipulate or transform. 
-    Additionally, you must select ``using transform``, which allows you to either select an existing transformation, or create a new one by selecting ``Create New Transform...``. 
-    When creating a new transformation, you will be presented with a formula editor (like the computed variables option). 
-    Here you can enter the formula for your transformation, using the ``$SOURCE`` variable to refer to the source variable you selected earlier.
-    
+    Here you can name the new column, and add a description of the transformation - this can be helpful if you wish to use the same transformation multiple times. To perform the transformation, we select the ``Source variable``, that is the column of data to transform.
+    Additionally, you must select ``using transform``, which allows you to either select an existing transformation, or create a new one by selecting ``Create New Transform...``.
+    When creating a new transformation, you will be presented with a formula editor (like the computed variables option).
+    Here you can enter the formula for your transformation, using the ``$source`` variable to refer to the source variable you selected earlier.
+
     For example, we may have a survey item that needs to be reversed score, using the ``New Transformed Variable`` option, you could create a new transformation with the formula:
-       ``7 - $SOURCE`` 
-    
-    In this example, ``$SOURCE`` would be item_3 and we are assuming a 6-point Likert scale (hence the 7 minus):
-  
-    |Reverse_Score| 
+
+      ``7 - $source``
+
+    In this example, ``$source`` would be item_3 and we are assuming a 6-point Likert scale (hence the 7 minus):
 
     We should yield results where 6 becomes 1, 5 becomes 2, 4 becomes 3, and so on:
 
@@ -61,7 +71,7 @@ Transformed Variables
        * - Item_1
          - Item_2
          - Item_3
-         - 7 - $SOURCE
+         - 7 - $source
        * - 4
          - 3
          - 3
@@ -74,20 +84,20 @@ Transformed Variables
          - 4
          - 2
          - 5
-        
-    Once created, this transformation can be applied to any number of items (such as items_1, items_2, and so on) by selecting the transformation from the ``using transform`` dropdown menu. 
-    This can be a real time saver when you have many columns to transform in the same way.
 
-    The Transformed variable`` option is also ideal for recoding variables using "if-then" logic. 
-    After clicking ``Create New Transform...`` and then clicking on the ``Add recode condition`` button next to the plus sign , you can specify the criteria for recoding your variable.
-    This can be useful if you wish to turn a continuous variable into discrete categories (or collapse discrete categories into smaller groupings of discrete categories).
+    Once created, this transformation can be applied across any number of such variables (such as items_1, items_2, and so on) -- we will explore this shortly.
 
-    For example, perhaps you have a column of data indicating continous scores on exam performance, and you wish to recode these into letter grades (HD, D, C, P, F).
-    You could use the recode conditions to specify the following:
+Recoding Variables
+------------------
 
-    |Recode_Variable| 
+    *Transformed variables* are also ideal for recoding variables, i.e., recoding ``1-4`` and ``5-10`` cigarettes per day to ``Smoker`` and ``0`` cigarettes per day to ``Non-smoker``, or recoding values greater than or equal to 85 as a ``High Distinction``, greater than 75 as a ``Distinction``, etc.
+    Recoding is performed by adding recode conditions with the ``Add recode condition`` button. Each recode condition is made up of a condition, i.e. ``$source == '1-4'``, or ``$source >= 85``, and a value to use if that condition is true, i.e. ``'Smoker'``, ``'High Distinction'``
 
-    And of course adding the additional if then statements for the C and P grades you may get the following recoded variable:
+    See the following example:
+
+    |Recode_Variable|
+
+    Adding the additional conditions for the C and P grades would result in a transformed variable that would perform the following recoding.
 
     .. list-table:: Example of Recoding
        :header-rows: 1
@@ -105,19 +115,14 @@ Transformed Variables
        * - 66
          - C
 
-..     Although both approaches can achieve similar outcomes, there are two key differences.
-..     First is how you refer to the variable (i.e., the column of data) you would like to manipulate or transform. For example, when applying a base-10 logarithmic transformation, both methods use the `LOG10` function.
-..     However, the difference lies in how you “call” or refer to the variable.
-..     Using ``New Computed Variable``, you would simply use the column name.
-..     So if your column of data is called `variable_name`, you would write `LOG10(variable_name)`.
-..     In contrast, using ``New Transformed Variable``, you instead assign the variable you would like to manipulate or transform as the ``Source variable``, which will appear as `$SOURCE` when calling a function.
-..     So the same transformation would be written as `LOG10($SOURCE)`.
-..     Second, ``New Computed Variable`` is typically used for simple, one-off tasks, whereas ``New Transformed Variable`` is usually used for more complex workflows and reusable transformations.
-..     ``New Transformed Variable`` is often better suited for more complex manipulations, such as recoding levels in a variable based on specific criteria.
-..     Imagine you have a column where participants self-report their smoking habits as Daily, Weekly, Monthly, Occasionally, and Never. Perhaps you want to recode this into a binary variable indicating whether participants are smokers (Daily, Weekly, Monthly, Occasionally) or non-smokers (Never).
+    Note that when evaluating recode conditions, jamovi evaluates each condition one after another, and uses the value from the first condition that resolves to be true. In the above example, this allowed us to express the ``Distinction`` condition as ``$source >= 75``, rather than the longer ``$source < 85 and $source >= 75``. Values greater or equal to 85 will already been taken care of by the first condition.
 
-    **examples of say, reverse scoring, and converting a continuous quantity into discretes, say, >85 => HD, >75 => D, etc.**
+Transforming Multiple Variables
+-------------------------------
 
+There are situations where we need to transform multiple varibles. For example, there may be a number of items in our survey data set which need to be reverse scored. To save the need for creating each individual transformed variable, one after another, jamovi allows for multiple transformed variables to be created in a single step.
+
+In this approach, select the variables to transform (either by holding down ctrl or ⌘ and clicking the colum headers, or selecting multiple variables under the ``Variables`` tab), and then select ``Transform`` from the ``Data`` tab. For each variable selected, a matching transformed variable will created, with the ``Source variable`` set accordingly. This allows you to define a single transform, and apply it across multiple variables at once.
 
 ===================
 Row and V Functions
@@ -181,7 +186,10 @@ It's possible to combine Row and V functions together. For example, to compute a
 
 (but it's also possible to use the more concise ``Z(...)`` function!)
 
-The Group by or rather ``group_by`` argument should be called within V-Functions to calculate a desired statistic within groups of data.
+Grouping with V Functions
+-------------------------
+
+Several V functions allow a ``group_by`` parameter, allowing the calculation of values within groups.
 Perhaps you have a dataset with a column labelled Dosage to indicate the treatment each participant recieved, say 50mgs vs 100mgs vs 150mgs.
 You'd likely wish to compute the mean score of some outcome variable for each Dosage group separately (without the scores from one treatment being combined with those from another). 
 This is made possible by calling the VMEAN function with the ``group_by`` argument: 
@@ -223,6 +231,7 @@ This is made possible by calling the VMEAN function with the ``group_by`` argume
      - 1
      - 1.33
 
+.. _list-of-functions:
 
 ====================
 ⚡ List of Functions
@@ -230,6 +239,7 @@ This is made possible by calling the VMEAN function with the ``group_by`` argume
 
 .. list-table:: Functions available in jamovi
    :header-rows: 1
+   :widths: 30 50 20
 
    * - Function
      - Description
@@ -237,6 +247,9 @@ This is made possible by calling the VMEAN function with the ``group_by`` argume
    * - ``Z(var)``
      - z-score: the number of standard deviations a raw value is from the overall mean. 
      - `More info <https://en.wikipedia.org/wiki/Standard_score>`__
+   * - ``ABSZ(var)``
+     - short-hand for ``ABS(Z(var))``
+     -
    * - ``SCALE(var)``
      - synonym for ``Z()``
      - 
@@ -266,11 +279,13 @@ This is made possible by calling the VMEAN function with the ``group_by`` argume
      - `More info <https://en.wikipedia.org/wiki/Floor_and_ceiling_functions>`__  
    * - ``CEILING(var)``
      - Ceiling: returns the smallest integer that is greater than or equal to each value in a column of data, effectively rounding up to the nearest whole number.
-     - `More info <https://en.wikipedia.org/wiki/Floor_and_ceiling_functions>`__  
-   * - ``MIN(var)``
+     - `More info <https://en.wikipedia.org/wiki/Floor_and_ceiling_functions>`__
+   * - | ``MIN(var)``
+       | ``VMIN(var)``
      - Minimum: identifies the lowest value in a row or column of data.
      - `More info <https://en.wikipedia.org/wiki/Maximum_and_minimum>`__
-   * - ``MAX(var)``
+   * - | ``MAX(var)``
+       | ``VMAX(var)``
      - Maximum: identifies the highest value in a row or column of data.
      - `More info <https://en.wikipedia.org/wiki/Maximum_and_minimum>`__
    * - ``STDEV(var1, var2, ...)``
@@ -288,7 +303,16 @@ This is made possible by calling the VMEAN function with the ``group_by`` argume
 
 
 
+Understanding Formulas
+----------------------
 
+ - numbers are numbers
+ - labels or text surrounded by backticks refer to variables
+ - values surrounded by quotes are text values
+ - adding two numbers together performs arithmetic
+ - adding two text values together performs concatenation
+ - adding a number and a text value together, results in the number being converted to text
+ - ``and`` and ``or``
 
 ==============
 Filtering Data
@@ -430,7 +454,7 @@ String concatenation
 ..    * - Reverse Scoring
 ..      - To catch `acquiescence response bias <https://en.wikipedia.org/wiki/Acquiescence_bias>`_ (participants who aways agree or disgree in self-report) `reverse-coded items <https://en.wikipedia.org/wiki/Acquiescence_bias>`_ are used, which requires them to be `Reverse Scored <https://en.wikipedia.org/wiki/Acquiescence_bias>`_. Reverse scoring ensures that all items are aligned in the same direction before creating a total or composite score.
 ..      - Custom
-..      - Requires manually choosing the maximum value possible value of this item (plus one) and subtract the items score from this value. In this example, we will imagine we have data with a 5-point likert scale. Perhaps we have on item that is reverse coded, so we would create a new transformed variable with the function `6 - $SOURCE` or `6 - variable_name` to reverse code the item.
+..      - Requires manually choosing the maximum value possible value of this item (plus one) and subtract the items score from this value. In this example, we will imagine we have data with a 5-point likert scale. Perhaps we have on item that is reverse coded, so we would create a new transformed variable with the function `6 - $source` or `6 - variable_name` to reverse code the item.
 ..      - 6 - variable_name
 ..    * - Recoding items (from strings or words into different strings or words).
 ..      - `Recoding <https://en.wikipedia.org/wiki/Data_recode>`_ involves changing the values or strings of a variable based on specified criteria. Recoding items is often used to group categories, create binary variables, or collapse levels in your independent variable for analysis.
