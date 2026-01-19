@@ -35,7 +35,7 @@ Computed Variables
 
     The simplest way to add a new computed variable to a data set is to select the ``Add`` (variable) button from the ``Data`` tab. Selecting ``Append`` under ``Computed variables`` will add a new computed column to the very right of the data set. To configure the computed variable, select either ``Setup`` from the ``Data`` tab, or double click on the column header. This will present you with the variable editor which looks as follows (for computed variables).
 
-    |computed_screenshot| 
+    |computed_screenshot|
 
     Here you can name the new column, and add a description if you desire. Selecting the small fx button will bring down a list of the functions available, and a list of variables you can use to compose your formula. It's possible to construct your formula simply by typing directly into the formula box, or by selecting the formulas and variables from the lists and double-clicking them to insert them.
 
@@ -191,11 +191,10 @@ Grouping with V Functions
 
 Several V functions allow a ``group_by`` parameter, allowing the calculation of values within groups.
 Perhaps you have a dataset with a column labelled Dosage to indicate the treatment each participant recieved, say 50mgs vs 100mgs vs 150mgs.
-You'd likely wish to compute the mean score of some outcome variable for each Dosage group separately (without the scores from one treatment being combined with those from another). 
-This is made possible by calling the VMEAN function with the ``group_by`` argument: 
+You'd likely wish to compute the mean score of some outcome variable for each Dosage group separately (without the scores from one treatment being combined with those from another).
+This is made possible by calling the VMEAN function with the ``group_by`` argument:
 
   ``VMEAN(outcome, group_by = Dosage)``
-
 
 .. list-table:: Example of the VMEAN() Function with group_by argument
    :header-rows: 1
@@ -245,38 +244,38 @@ This is made possible by calling the VMEAN function with the ``group_by`` argume
      - Description
      -
    * - ``Z(var)``
-     - z-score: the number of standard deviations a raw value is from the overall mean. 
+     - z-score: the number of standard deviations a raw value is from the overall mean.
      - `More info <https://en.wikipedia.org/wiki/Standard_score>`__
    * - ``ABSZ(var)``
      - short-hand for ``ABS(Z(var))``
      -
    * - ``SCALE(var)``
      - synonym for ``Z()``
-     - 
+     -
    * - ``LN(var)``
-     - Natural logarithm (base *e*): the natural logarithm (base e) of each value in a column of data. 
+     - Natural logarithm (base *e*): the natural logarithm (base e) of each value in a column of data.
      - `More info <https://doi.org/10.1177/00045632211050531>`__
    * - ``LOG10(var)``
      - Log base 10: the logarithm (base 10) of each value in a column of data.
      - `More info <https://doi.org/10.1177/00045632211050531>`__
    * - ``SQRT(var)``
      - Square root: the square root of each value in a column of data.
-     - `More info <https://en.wikipedia.org/wiki/Square_root>`__  
+     - `More info <https://en.wikipedia.org/wiki/Square_root>`__
    * - ``EXP(var)``
      - Exponential: raises *e* to the power of each value in a column of data.
      - `More info <https://en.wikipedia.org/wiki/Exponential_function>`__
    * - ``ABS(var)``
      - Absolute value: converts all negative values in a column of data to their positive counterparts, while leaving positive values unchanged.
-     - `More info <https://en.wikipedia.org/wiki/Absolute_value>`__  
+     - `More info <https://en.wikipedia.org/wiki/Absolute_value>`__
    * - ``ROUND(var, n)``
      - Rounding: adjusts each value in a column of data to a specified number of decimal places or to the nearest whole number.
-     - `More info <https://en.wikipedia.org/wiki/Rounding>`__  
+     - `More info <https://en.wikipedia.org/wiki/Rounding>`__
    * - ``RANK(var)``
      - Ranking: assigns an ordinal rank to each value in a column of data based on its position relative to other values.
-     - `More info <https://en.wikipedia.org/wiki/Ranking_(statistics)>`__  
+     - `More info <https://en.wikipedia.org/wiki/Ranking_(statistics)>`__
    * - ``FLOOR(var)``
      - Floor: returns the greatest integer that is less than each value in a column of data, effectively rounding down to the nearest whole number.
-     - `More info <https://en.wikipedia.org/wiki/Floor_and_ceiling_functions>`__  
+     - `More info <https://en.wikipedia.org/wiki/Floor_and_ceiling_functions>`__
    * - ``CEILING(var)``
      - Ceiling: returns the smallest integer that is greater than or equal to each value in a column of data, effectively rounding up to the nearest whole number.
      - `More info <https://en.wikipedia.org/wiki/Floor_and_ceiling_functions>`__
@@ -293,15 +292,10 @@ This is made possible by calling the VMEAN function with the ``group_by`` argume
      - `More info <https://en.wikipedia.org/wiki/Standard_deviation>`__
    * - ``SUM(var1, var2, ...)``
      - Summation: calculates the total of items (or columns of data) by adding them together.
-     - `More info <https://en.wikipedia.org/wiki/Summation>`__ 
+     - `More info <https://en.wikipedia.org/wiki/Summation>`__
    * - ``MEAN(var1, var2, ...)``
      - Participant Mean: Calculates the mean score across multiple variables for each participant or row of data.
-     - `More info <https://en.wikipedia.org/wiki/Mean>`__  
-  
-
-
-
-
+     - `More info <https://en.wikipedia.org/wiki/Mean>`__
 
 Understanding Formulas
 ----------------------
@@ -531,7 +525,7 @@ String concatenation
   :class: centered
   :width: 37%
 
-    
+
 .. |Transformed_Variable| image:: /_images/tr_transformed_variable.png
   :alt: Example transformation variable editor using the transformed variable option.
   :class: centered
