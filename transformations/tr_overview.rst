@@ -313,11 +313,11 @@ To compute the mean score of the outcome variable for each Dosage group separate
      - Rounding: adjusts each value in a column of data to a specified number of decimal places or to the nearest whole number.
      - `More info <https://en.wikipedia.org/wiki/Rounding>`__
    * - ``SCALE(var)``
-     - Scale: synonym for ``Z(var)``.
+     - Scale: Returns the normalized values of a set of numbers - synonym for ``Z(var)``.
      - `More info <https://en.wikipedia.org/wiki/Standard_score>`__
    * - | ``STDEV(var)``
        | ``VSTDEV(var)``
-     - Standard deviation: measures the amount of variation in a row or column of data.
+     - Standard deviation: measures the amount of standard deviation in a row or column of data.
      - `More info <https://en.wikipedia.org/wiki/Standard_deviation>`__
    * - | ``SUM(var)``
        | ``VSUM(var)``
@@ -344,7 +344,10 @@ To compute the mean score of the outcome variable for each Dosage group separate
    * - | ``VAR(var)``
        | ``VVAR(var)``
      - Variance: Returns the variance of a row or column of data.
-     -
+     - `More info <https://en.wikipedia.org/wiki/Variance>`__
+   * - ``Z(var)``
+     - Z-score: Returns the normalized values of a set of numbers.
+     - `More info <https://en.wikipedia.org/wiki/Standard_score>`__
    * -
      - **LOGICAL FUNCTIONS**
      -
@@ -361,16 +364,16 @@ To compute the mean score of the outcome variable for each Dosage group separate
      - **TEXT FUNCTIONS**
      -
    * - ``CONTAINS('needle', haystack)``
-     -  Determines if specificied string of text (i.e. 'needle') appears in the variable (i.e. haystack) and can be expanded to look for multiple strings of text in a single or multiple variables: ``CONTAINS('text_1', 'text_2', var_1, var_2)``.
+     -  Determines if specificied string of text (i.e. 'needle') appears in the variable (i.e. haystack) and can be expanded to look for multiple strings across one or more variables: ``CONTAINS('text_1', 'text_2', var_1, var_2)``.
      - `More info <https://en.wikipedia.org/wiki/String_searching_algorithm>`__
    * - ``SPLIT(var, 'by', position)``
-     - Splits a string of text in a column of data (var) by a specified character or string of text and returns only the text at the specified position. For example, the string `due_by20/12` using ``SPLIT(var, 'by', 3)`` would return `20/12`.
+     - Splits a string of text in a variable by a specified character (or string of text) and returns only the text at the specified position. For example, the string `ParticipantbyP01` using ``SPLIT(var, 'by', 3)`` would return `P01`.
      -  `More info <https://en.wikipedia.org/wiki/String_(computer_science)>`__
    * - ``TEXT(var)``
      - Converts values to text format (numbers to strings of text).
      -  `More info <https://en.wikipedia.org/wiki/String_(computer_science)>`__
    * - ``VALUE(var)``
-     - Converts text (strings of text) to values (if possible)
+     - Converts text (strings) to values (if possible).
      - `More info <https://en.wikipedia.org/wiki/String_(computer_science)>`__
    * -
      - **DATE/TIME FUNCTIONS**
@@ -394,9 +397,9 @@ To compute the mean score of the outcome variable for each Dosage group separate
      - **MISC. FUNCTIONS**
      -
    * - ``COUNT(var)``
-     - Counts the number of non-missing values'.
+     - Counts the number of non-missing values.
      - `More info <https://en.wikipedia.org/wiki/Counting>`__
-   * - ``FILTER(var, filter_expression)``
+   * - ``FILTER(var, filter expression)``
      - Filters a variable using a filter expression. For example, ``FILTER(var_1, var_2 == "Group_A")`` returns only rows in var_1 where var_2 is matched with the label "Group A".
      - `More info <https://blog.jamovi.org/2018/04/25/jamovi-filters.html>`__
    * - ``INT(var)``
@@ -406,7 +409,7 @@ To compute the mean score of the outcome variable for each Dosage group separate
      - Offsets a column of data up or down by +/- n rows
      - `More info <https://en.wikipedia.org/wiki/Offset_(computer_science)>`__
    * - ``ROW()``
-     - Returns a column of data with each row indicating the row number.
+     - Returns a column with each row indicating the row number.
      - `More info <https://en.wikipedia.org/wiki/Row_and_column>`__
    * - ``SAMPLE(var, n)``
      - Draws a random sample of n values from a variable.
