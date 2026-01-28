@@ -57,7 +57,7 @@ Transformed Variables
     When creating a new transformation, a formula editor (like the computed variables option) will appear.
     The formula editor (via this option) rquires the use of the ``$source`` variable to refer to the source variable selected earlier.
 
-    For example, we have a survey item that needs to be reversed score. By using the ``New Transformed Variable`` option, the item can be reverse scored with the following formula:
+    For example, there is a survey item that needs to be reversed score. By using the ``New Transformed Variable`` option, the item can be reverse scored with the following formula:
 
       ``7 - $source``
 
@@ -183,7 +183,7 @@ V Functions
      - 9
      - 4
 
-It's possible to combine Row and V functions together. For example, to compute a z-score, we might use the function
+It's possible to combine Row and V functions together. For example, to compute a z-score, use the function
 
   ``(A - VMEAN(A)) / VSTDEV(A)``
 
@@ -434,46 +434,148 @@ To compute the mean score of the outcome variable for each Dosage group separate
      - `More info <https://en.wikipedia.org/wiki/Uniform_distribution_(continuous)>`__
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Understanding Formulas
 ----------------------
+  In jamovi formulas are constructed using a combination of numbers, variables, values, operators and functions.
+  Below are some general principles to keep in mind when constructing formulas:
 
- - numbers are numbers
- - labels or text surrounded by backticks refer to variables
- - values surrounded by quotes are text values
- - adding two numbers together performs arithmetic
- - adding two text values together performs concatenation
- - adding a number and a text value together, results in the number being converted to text
- - ``and`` and ``or``
+  - numbers are numbers and will behave as such
+  - adding two numbers together performs arithmetic (i.e. 2 + 2 = 4)
+  - text surrounded by ticks refer to a string of text (i.e. \'example text\')
+  - adding two text values together performs concatenation or rather joins them together (i.e. \'hello\' + \'world\' = \'helloworld\')
+  - variables are referred to by their name (i.e. variable_name) and can be referred to with ticks as well (i.e. \`variable name\`)
+  - values surrounded by ticks are strings of text (i.e. \'10\')
+  - adding a number and a text value together, results in the number being converted to text (i.e. 2 + \`apples\` = \`2apples\`)
+  - ``and`` and ``or`` are used for logical operations (i.e. ``IF(var_1 > 5 and var_2 < 10, 'Yes', 'No')`` and ``IF(var_1 == 'A' or var_2 == 'B', 'Match', 'No Match')``)
 
 ==============
 Filtering Data
 ==============
+  Often only a subset of data is needed for an analysis. For example, perhaps only female participants are needed in an analysis.
+  By clicking the data tab and selecting the filter icon, a filter is created and restricts any analyses to only those rows that meet the filter's criteria.
 
-Introduce general principles of filtering data
+  |Filter_Data|
 
-... and why you can't use *V functions* in filters (sad face) (we'll need to link to this explanation)
+  The filer used above, ``Sex == 'Female'``, has filtered out any participants who are not Female or rather restricted the data set to only Female participants.
+  Below is an example of how this filter has effected the data, the first column shows the rows that are included (with a tick) and which are excluded (with a cross):
+
+    .. list-table:: Example of Filtering Data
+      :header-rows: 1
+
+      * - Filter
+        - Sex
+        - Outcome
+      * - ✔
+        - Female
+        - 10
+      * - ✘
+        - Male
+        - 4
+      * - ✘
+        - Male
+        - 6
+      * - ✔
+        - Female
+        - 9
+      * - ✔
+        - Female
+        - 9
+
+
+  Only the data that has a tick (or rather female participants) will be included in analyses and visualisations.
+  It is possible to filter out based on multiple variables by using the ``and`` and ``or`` operators.
+  For example, to filter based on Female Sex and Age greater than 30 the following filter could be used: ``Sex == 'Female' and Age > 30``.
+  The same principles can be applied for ``or`` conditions as well and if wishing to filter on the same variable multiple times.
+  More information about filters can be found in our blog post `here <https://blog.jamovi.org/2018/04/25/jamovi-filters.html>`_.
+
+
+.. I think VFUNCTIONS work the way I would expect them to with filters... but maybe we chat...
+.. . and why you can't use *V functions* in filters (sad face) (we'll need to link to this explanation)
 
 ==================
 Restructuring Data
 ==================
 
-Restructuring data in jamovi (at this time) is provided by the jReshape and jTransform modules.
+  When working with data, it is often necessary to restructure the data from a wide format to a long format or vice versa.
+
+  A quick rule of thumb for recognising wide versus long format is this: in wide format, each row represents a participant, and repeated measurements are stored in separate columns (one column per outcome at each time point or condition).
+  And in long-format, each row represents a single measurement occasion for a participant.
+  Multiple rows exist per participant, with each row representing a different time point or condition.
+  See our blog post here for more information on
+
+  To restructure data in jamovi (at this time) requires the jReshape and jTransform modules.
+  Each module can be found by clicking the plus icon in the top right of jamovi and searching for the module name.
+
+  For example, say there is some data of participants Score on a cognitive task with three levels of difficulty: Easy, Medium, and Hard.
+  Below is a table showing the wide format version of this data, but instead we'd rather look at this in long format (since the manipulation was a within-subjects design).
+
+    .. list-table:: Wide Format Example
+      :header-rows: 1
+
+      * - ID
+        - Score_Hard
+        - Score_Medium
+        - Score_Easy
+      * - 1
+        - 30
+        - 50
+        - 70
+      * - 2
+        - 20
+        - 30
+        - 55
+      * - 3
+        - 40
+        - 50
+        - 52
+
+
+  To transform this so each row represents a single measurement occasion for a participant or rather in long format, the three score columns must become a single column, and new column is needed to indicate the condition (i.e., Hard, Medium, Easy).
+
+  The jtransform module makes this easy. After installing and loading the jtransform module, select the ``Analyses`` tab, click on ``Data`` and then from the dropdown select ``Wide to Long``.
+  By moving the three score columns (``Score_Hard``, ``Score_Medium``, ``Score_Easy``) into the ``Variables to be Transformed`` box and ``ID`` into ``the Variable That Identifies the same Unit`` box and click the blue ``Create`` button a new data set will be created in long format.
+  The new data set should have succesfully restructured the data from wide format to long format as shown below:
+
+    .. list-table:: Long Format Example
+      :header-rows: 1
+
+      * - ID
+        - Condition
+        - Score
+      * - 1
+        - Hard
+        - 30
+      * - 1
+        - Medium
+        - 50
+      * - 1
+        - Easy
+        - 70
+      * - 2
+        - Hard
+        - 20
+      * - 2
+        - Medium
+        - 30
+      * - 2
+        - Easy
+        - 55
+      * - 3
+        - Hard
+        - 40
+      * - 3
+        - Medium
+        - 50
+      * - 3
+        - Easy
+        - 52
+
+
+  To restructure data from long format to wide format, the jtransform module can be used.
+  Using the same example of long formated data above, to restructure this data back to wide format select ``Analyses``, click on ``Data``, and select ``Long to Wide``.
+  Move ``Score`` into the ``Variables to be Transformed`` box, ``ID`` into the ``Variable That Identifies the Same Unit`` box, and ``Condition`` into ``Varibales that Differentiate within a Unit``, click on the blue ``Create`` button and the data set will be transformed into wide format.
+  The data set should appear as shown in the wide format example above.
+
 
 ===================
 Common Data Recipes
@@ -689,3 +791,10 @@ String concatenation
   :alt: How to recode a variable using the transformed variable option.
   :class: centered
   :width: 37%
+
+
+
+.. |Filter_Data| image:: /_images/tr_filter_example.png
+  :alt: How to filter data in jamovi.
+  :class: centered
+  :width: 75%
