@@ -19,6 +19,8 @@ Data Variables
     - 'Retain unused levels in analyses'
     - Some existing content https://www.jamovi.org/user-manual.html#data-variables
 
+.. _computed-variables:
+
 ==================
 Computed Variables
 ==================
@@ -581,16 +583,131 @@ Restructuring Data
 Common Data Recipes
 ===================
 
-Excluding outliers
-Reverse scoring survey items
-Computing a sum score (say an extraversion questionaire)
-Recoding a continuous variable to categories
-Recoding/reducing the number of categories
-Split by functionality (jamovi does this poorly)
-Analysing a subset of data
-String concatenation
+TODO
 
+  - Excluding outliers
+  - Reverse scoring survey items
+  - Computing a sum score (say an extraversion questionaire)
+  - Recoding a continuous variable to categories
+  - Recoding/reducing the number of categories
+  - Split by functionality (jamovi does this poorly)
+  - Analysing a subset of data
+  - String concatenation
 
+Date Handling
+-------------
+
+Date handling in jamovi is currently fairly limited. There is no 'native' Date data type at this time (one is planned however). The following describes a number of date manipulations that are available.
+
+There are two useful date functions, ``DATEVALUE()`` and ``DATE()``, that can be used with :ref:`computed-variables`. ``DATEVALUE()`` converts a date string such as ``2025-01-29`` to an integer representing the number of days since January 1st, 1970. ``DATE()`` performs the opposite transformation, converting such an integer into a date string. A useful way to use these functions is to first convert the date to an integer, perform some computation, and then convert the result back to a date string. Both functions optionally take a date format string if using a particular format.
+
+    .. list-table:: Example date formatting
+      :header-rows: 1
+
+      * - Day
+        - ``DATE(Day)``
+        - ``DATE(Day, "%d %m %Y")``
+        - ``DATE(Day, "%m/%d/%y")``
+      * - 13
+        - 1970-01-13
+        - 13 01 1970
+        - 01/13/81
+      * - 4197
+        - 1981-06-29
+        - 29 06 1981
+        - 06/29/81
+
+Computing a date in the future
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following example converts a date to an integer, adds 7 (representing 7 days), and then converts it back to a date string.
+
+    .. list-table:: Adding 7 days to a date
+      :header-rows: 1
+
+      * - Date
+        - ``DATEVALUE(Date)``
+        - ``DATEVALUE(Date) + 7``
+        - ``DATE(DATEVALUE(Date) + 7)``
+      * - 2026-01-29
+        - 20482
+        - 20489
+        - 2026-02-05
+      * - 2024-03-10
+        - 19792
+        - 19799
+        - 2024-03-17
+      * - 2025-08-22
+        - 20322
+        - 20329
+        - 2025-08-29
+
+Computing days elapsed
+^^^^^^^^^^^^^^^^^^^^^^
+
+    .. list-table:: Computing days elapsed
+      :header-rows: 1
+
+      * - StartDate
+        - EndDate
+        - ``DATEVALUE(EndDate) - DATEVALUE(StartDate)``
+      * - 2026-01-29
+        - 2026-02-15
+        - 17
+      * - 2024-03-10
+        - 2024-04-11
+        - 32
+      * - 2025-08-22
+        - 2024-04-11
+        - -498
+
+Extracting month, year, or day
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The ``SPLIT()`` function can be used to extract the year, month, or day of month, from a date string. The ``SPLIT()`` function takes a text value (such as a date string), splits it into chunks using the second argument as the delimeter, and returns the nth chunk, determined by the third argument. Note that ``SPLIT()`` returns a text value, which will needs to be converted to an integer (with the ``INT()`` function) if to be used in arithmetic.
+
+    .. list-table:: Extracting month, year, or day
+      :header-rows: 1
+
+      * - Date
+        - ``SPLIT(Date, '-', 1)``
+        - ``SPLIT(Date, '-', 2)``
+        - ``SPLIT(Date, '-', 3)``
+      * - 2026-01-29
+        - 2026
+        - 01
+        - 29
+      * - 2024-03-10
+        - 2024
+        - 03
+        - 10
+      * - 2025-08-22
+        - 2025
+        - 08
+        - 22
+
+Composing a date from parts
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    .. list-table:: Composing a date from parts
+      :header-rows: 1
+
+      * - Year
+        - Month
+        - DayOfMonth
+        - ``Year + '-' + Month + '-' + DayOfMonth``
+      * - 2026
+        - 01
+        - 29
+        - 2026-01-29
+      * - 2024
+        - 03
+        - 10
+        - 2024-03-10
+      * - 2025
+        - 08
+        - 22
+        - 2025-08-22
 
 .. .. list-table:: Transformations Easily Accesible in jamovi
 ..    :header-rows: 1
