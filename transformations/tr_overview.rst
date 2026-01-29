@@ -55,7 +55,7 @@ Transformed Variables
     Here the new column can be given a name and a description - this can be helpful if you wish to use the same transformation multiple times. To perform the transformation, select the ``Source variable``, that is the column of data to transform.
     Additionally, select ``using transform``, which allows for either the selection of an existing transformation or the ability to create a new one by selecting ``Create New Transform...``.
     When creating a new transformation, a formula editor (like the computed variables option) will appear.
-    The formula editor (via this option) rquires the use of the ``$source`` variable to refer to the source variable selected earlier.
+    The formula editor (via this option) requires the use of the ``$source`` variable to refer to the source variable selected earlier.
 
     For example, there is a survey item that needs to be reversed score. By using the ``New Transformed Variable`` option, the item can be reverse scored with the following formula:
 
@@ -292,7 +292,7 @@ To compute the mean score of the outcome variable for each Dosage group separate
        | ``VMAX(var)``
      - Maximum: identifies the highest value in a row or column of data.
      - `More info <https://en.wikipedia.org/wiki/Maximum_and_minimum>`__
-   * - ``MAXABSOLUTEIQR(var)``
+   * - ``MAXABSIQR(var)``
      - Maximum Absolute Interquartile Range: Convenience short-hand for ``MAX(ABSIQR( variable 1, variable 2, … ))``.
      - `More info <https://en.wikipedia.org/wiki/Interquartile_range>`__
    * - ``MAXABSZ(var)``
