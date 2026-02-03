@@ -437,56 +437,71 @@ To compute the mean score of the outcome variable for each Dosage group separate
 Understanding Formulas
 ----------------------
   In jamovi formulas are constructed using a combination of numbers, variables, values, operators and functions.
-  Below are some general principles to keep in mind when constructing formulas:
 
-  - numbers are numbers and will behave as such
-  - adding two numbers together performs arithmetic (i.e. 2 + 2 = 4)
-  - text surrounded by ticks refer to a string of text (i.e. \'example text\')
-  - adding two text values together performs concatenation or rather joins them together (i.e. \'hello\' + \'world\' = \'helloworld\')
-  - variables are referred to by their name (i.e. variable_name) and can be referred to with ticks as well (i.e. \`variable name\`)
-  - values surrounded by ticks are strings of text (i.e. \'10\')
-  - adding a number and a text value together, results in the number being converted to text (i.e. 2 + \`apples\` = \`2apples\`)
-  - ``and`` and ``or`` are used for logical operations (i.e. ``IF(var_1 > 5 and var_2 < 10, 'Yes', 'No')`` and ``IF(var_1 == 'A' or var_2 == 'B', 'Match', 'No Match')``)
+  Numbers are simply numbers (i.e. 1, 2.5, -3), adding two numbers together performs arithmetic (i.e. 2 + 2 = 4).
+  Variables are referred to by their name (i.e. variable_name) and can be referred to with backticks as well (i.e. \`variable name\`) - when the variable name contains spaces it is a requirement to use backticks otherwise jamovi will not be able to interpret the formula correctly.
+
+  Often we use strings of text in our rows of data to indicate categories or conditions.
+  In jamovi, adding two text values together performs concatenation or rather joins them together (i.e. hello + world = helloworld)
+  Adding numbers and strings of text together, again performs concatenation where by the number is converted to text alogside the string of text (i.e. 2 + apples = 2apples).
+
+  When using formulas often we may wish to use ``and`` and ``or``  when performing are logical operations (i.e. ``IF(var_1 > 5 and var_2 < 10, 'Yes', 'No')`` and ``IF(var_1 == 'A' or var_2 == 'B', 'Match', 'No Match')``)
+
+  values surrounded by ticks are strings of text (i.e. \'10\')
 
 ==============
 Filtering Data
 ==============
-  Often only a subset of data is needed for an analysis. For example, perhaps only female participants are needed in an analysis.
+  Often only a subset of data is needed for an analysis. For example, perhaps only participants who smoke are needed in an analysis.
   By clicking the data tab and selecting the filter icon, a filter is created and restricts any analyses to only those rows that meet the filter's criteria.
 
   |Filter_Data|
 
-  The filer used above, ``Sex == 'Female'``, has filtered out any participants who are not Female or rather restricted the data set to only Female participants.
+  The filer used above, ``Smoke == 'Yes'``, has filtered out any participants who do not smoke or rather restricted the data set to only participants who smoke.
   Below is an example of how this filter has effected the data, the first column shows the rows that are included (with a tick) and which are excluded (with a cross):
 
     .. list-table:: Example of Filtering Data
       :header-rows: 1
 
       * - Filter
-        - Sex
+        - Smoke
         - Outcome
       * - ✔
-        - Female
+        - Yes
         - 10
       * - ✘
-        - Male
+        - No
         - 4
       * - ✘
-        - Male
+        - No
         - 6
       * - ✔
-        - Female
+        - Yes
         - 9
       * - ✔
-        - Female
+        - Yes
         - 9
 
 
-  Only the data that has a tick (or rather female participants) will be included in analyses and visualisations.
+  Only the data that has a tick (or rather participants who smoke) will be included in analyses and visualisations.
   It is possible to filter out based on multiple variables by using the ``and`` and ``or`` operators.
   For example, to filter based on Female Sex and Age greater than 30 the following filter could be used: ``Sex == 'Female' and Age > 30``.
   The same principles can be applied for ``or`` conditions as well and if wishing to filter on the same variable multiple times.
-  More information about filters can be found in our blog post `here <https://blog.jamovi.org/2018/04/25/jamovi-filters.html>`_.
+
+
+  Alternatively, an additional filter can be created by clicking the plus icon in the filter editor.
+  A second filter will appear below the first, and by adding the desired filter criteria such as ``Age > 30``, the data will be filtered based on both filters.
+  Additionally, we can toggle each filter on and off by clicking the toggle and switching it to active or inactive:
+
+  |Toggle_Filter_Data|
+
+
+
+
+
+
+
+  .. More information about filters can be found in our blog post `here <https://blog.jamovi.org/2018/04/25/jamovi-filters.html>`_.
 
 
 .. I think VFUNCTIONS work the way I would expect them to with filters... but maybe we chat...
@@ -797,4 +812,9 @@ String concatenation
 .. |Filter_Data| image:: /_images/tr_filter_example.png
   :alt: How to filter data in jamovi.
   :class: centered
-  :width: 75%
+  :width: 37%
+
+.. |Toggle_Filter_Data| image:: /_images/tr_toggle_filter.png
+  :alt: How to toggle filter on and off in jamovi.
+  :class: centered
+  :width: 37%
