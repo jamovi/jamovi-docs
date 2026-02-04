@@ -487,20 +487,15 @@ Filtering Data
 
   Only the data that has a tick (or rather participants who smoke) will be included in analyses and visualisations.
   It is possible to filter out based on multiple variables by using the ``and`` and ``or`` operators.
-  For example, to filter based on Female Sex and Age greater than 30 the following filter could be used: ``Sex == 'Female' and Age > 30``.
+  For example, to filter based on Female Sex and Age of 30 and greater the following filter could be used: ``Sex == 'Female' and Age >= 30``.
   The same principles can be applied for ``or`` conditions as well and if wishing to filter on the same variable multiple times.
 
 
   Alternatively, an additional filter can be created by clicking the plus icon in the filter editor.
-  A second filter will appear below the first, and by adding the desired filter criteria such as ``Age > 30``, the data will be filtered based on both filters.
+  A second filter will appear below the first, and by adding the desired filter criteria such as ``Age >= 30``, the data will be filtered based on both filters.
   Additionally, we can toggle each filter on and off by clicking the toggle and switching it to active or inactive:
 
   |Toggle_Filter_Data|
-
-
-
-
-
 
 
   .. More information about filters can be found in our blog post `here <https://blog.jamovi.org/2018/04/25/jamovi-filters.html>`_.
@@ -513,26 +508,19 @@ Filtering Data
 Restructuring Data
 ==================
 
-  When working with data, it is often necessary to restructure the data from a wide format to a long format or vice versa.
-
-  A quick rule of thumb for recognising wide versus long format is this: in wide format, each row represents a participant, and repeated measurements are stored in separate columns (one column per outcome at each time point or condition).
-  And in long-format, each row represents a single measurement occasion for a participant.
-  Multiple rows exist per participant, with each row representing a different time point or condition.
-  See our blog post here for more information on
-
-  To restructure data in jamovi (at this time) requires the jReshape and jTransform modules.
-  Each module can be found by clicking the plus icon in the top right of jamovi and searching for the module name.
-
-  For example, say there is some data of participants Score on a cognitive task with three levels of difficulty: Easy, Medium, and Hard.
-  Below is a table showing the wide format version of this data, but instead we'd rather look at this in long format (since the manipulation was a within-subjects design).
+What is Wide vs Long Format?
+-----------------------------
+  Within data analysis, two common data structures are often required these are wide format and long format.
+  Wide format data is set up such that each row represents a participant, and repeated measurements are stored in separate columns (one column per outcome at each time point or condition).
+  For example, below we have the quiz score of students during Weeks 2, 4, and 6 of Semester displayed in wide format:
 
     .. list-table:: Wide Format Example
       :header-rows: 1
 
       * - ID
-        - Score_Hard
-        - Score_Medium
-        - Score_Easy
+        - ScoreWeek_2
+        - ScoreWeek_4
+        - ScoreWeek_6
       * - 1
         - 30
         - 50
@@ -546,53 +534,75 @@ Restructuring Data
         - 50
         - 52
 
+  Here each row represents a unique student (ID), and their quiz scores at Weeks 2, 4, and 6 are stored in separate columns.
+  To run a repeated measures ANOVA, or rather to compare the average quiz scores across the three weeks, jamovi (much like other statistical software) requires the data to be in wide format as shown above.
 
-  To transform this so each row represents a single measurement occasion for a participant or rather in long format, the three score columns must become a single column, and new column is needed to indicate the condition (i.e., Hard, Medium, Easy).
-
-  The jtransform module makes this easy. After installing and loading the jtransform module, select the ``Analyses`` tab, click on ``Data`` and then from the dropdown select ``Wide to Long``.
-  By moving the three score columns (``Score_Hard``, ``Score_Medium``, ``Score_Easy``) into the ``Variables to be Transformed`` box and ``ID`` into ``the Variable That Identifies the same Unit`` box and click the blue ``Create`` button a new data set will be created in long format.
-  The new data set should have succesfully restructured the data from wide format to long format as shown below:
+  In long-format, each row represents a single measurement occasion for a participant with multiple rows per participant.
+  Below is the same data of the quiz scores at Weeks 2, 4, and 6 represented in long format:
 
     .. list-table:: Long Format Example
       :header-rows: 1
 
       * - ID
-        - Condition
+        - Time
         - Score
       * - 1
-        - Hard
+        - Week_2
         - 30
       * - 1
-        - Medium
+        - Week_4
         - 50
       * - 1
-        - Easy
+        - Week_6
         - 70
       * - 2
-        - Hard
+        - Week_2
         - 20
       * - 2
-        - Medium
+        - Week_4
         - 30
       * - 2
-        - Easy
+        - Week_6
         - 55
       * - 3
-        - Hard
+        - Week_2
         - 40
       * - 3
-        - Medium
+        - Week_4
         - 50
       * - 3
-        - Easy
+        - Week_6
         - 52
+.
+  As shown above, Score is now a single column with all Score values stacked, and Time is a separate variable that indicates the Week of measurement (e.g., Week_2, Week_4, Week_6).
+  Using long format makes it easy to summarise, plot, and model change over time because time is represented explicitly as data rather than being embedded in column names.
+  Long format is also required for mixed modelling, by having the data in long format, we can easily specify both fixed effects (e.g., the effect of time on quiz scores) and random effects (e.g., individual differences between students).
 
+  When working with data, it is often necessary to restructure the data from a wide format to a long format or vice versa. Below is a guide on how to restructure data in jamovi.
 
-  To restructure data from long format to wide format, the jtransform module can be used.
-  Using the same example of long formated data above, to restructure this data back to wide format select ``Analyses``, click on ``Data``, and select ``Long to Wide``.
-  Move ``Score`` into the ``Variables to be Transformed`` box, ``ID`` into the ``Variable That Identifies the Same Unit`` box, and ``Condition`` into ``Varibales that Differentiate within a Unit``, click on the blue ``Create`` button and the data set will be transformed into wide format.
-  The data set should appear as shown in the wide format example above.
+How to Restructure Data in jamovi
+----------------------------------
+  To restructure data in jamovi (at this time) requires the jReshape module, which can be installed by clicking the plus icon in the top right of jamovi and searching for the module name ``jReshape``.
+  Once installed and loaded, the jReshape module provides the jtransform functionality which allows for restructuring data from wide to long format and vice versa.
+  Under the ``Analyses`` tab, a new option called ``Data`` will appear which contains the jReshape options.
 
+Wide to Long:
+~~~~~~~~~~~~
+  To transform data from wide format to long format, click on ``Analyses`` tab, select ``Data``, and then from the dropdown select ``Wide to Long``.
+  Here, take the columns that represent the repeated measurements (i.e., Score_Week_2, Score_Week_4, Score_Week_6) and move them into the ``Columns to row`` box.
+  Below we have the option rename our new columns, under ``Target Variable`` rename this variable sensibly such as the name of the dependant variable (i.e., ``Score``).
+  Additonaly, under ``Index Variable (conatins repeated levels values)`` this should be named something that indicates the condition or time point (i.e., ``Time``).
+  In the output window, check the preview of what the data will look like once transformed to long format is correct and sensible.
+  By clicking the blue ``Create`` button, jamovi will open a new jamovi window with the data set now transformed to long format.
+
+Long to Wide:
+~~~~~~~~~~~~
+  To transform data from long format to wide format in jamovi, click on ``Analyses`` tab, select ``Data``, and then from the dropdown select ``Long to Wide``.
+  Here, move the variable that contains the variable of interest (i.e., ``Score``) into the ``Rows to Columns`` box.
+  Next, choose the variable that identifies the repeated measurements time point or condition (i.e., ``Time``) and move this into the ``Indexing Variables`` box.
+  To ensure the data is restructured correctly, we need to also move the variable that identifies the unique participant (i.e., ``ID``) into the ``ID Variable`` box.
+  In the right hand side output window, double-check the preview of what the data will look like once transformed to wide format is correct and sensible.
+  By clicking the blue ``Create`` button, jamovi will open a new jamovi window with the data set now transformed to wide format.
 
 ===================
 Common Data Recipes
