@@ -11,10 +11,110 @@ Overview
 ==============
 Data Variables
 ==============
+    Data variables are simply the columns and rows of data imported into jamovi. These are yet to be transformed or manipulated in any way.
+    They are the raw data, imported into jamovi for analysis.
 
-    - Setting data type and measure type
-    - Missing values
-    - Adding labels to levels
+Measure and Data Types
+----------------------
+    In jamovi, variables have a *Measure type* and a *Data type* to indicate the type of data contained in the variable and how it should be treated in analyses.
+
+    Measure types can be either:
+      - Continuous: numbers whereby any infinite possible value is meaningful, such as height or weight.
+      - Ordinal: numbers without decimal points, such as Likert scale responses, whereby it is illogical to have values between the integers, such as 2.5 on a single item response on a Likert scale.
+      - Nominal: text or categories.
+      - ID: unique identifiers for each row/participant.
+      .. Okay how do we get the nice little icons for these? like here: https://www.jamovi.org/user-manual.html#data-variables
+
+    Data types can be either:
+      - Integer: whole numbers without decimal points
+      - Decimal: numbers with decimal points
+      - Text: strings of text that make up words or categories.
+
+    Typically the variable's data type and measure type are set automatically when data is imported.
+    Note, some combinations of data type and measure type are not possible (e.g., a variable cannot be both text and continuous, or decimal and nominal). A variable's data type and measure type can be changed as needed and at times will need to be changed to ensure analyses are performed correctly.
+
+    To change the data type and measure type of a variable, double click on the column header to open the variable editor.
+    Here the variable's name, description, data type, and measure type can be seen and modified.
+    Click on the measure type a drop down menu will appear with the options to change the measure type.
+    To change the data type, click on the data type and select the desired data type from the drop down menu.
+    For example, below is the variable editor for a variable called Score (representing some continuous percentage of performance) which incorrectly shows as Nominal data type with an Ordinal measure type:
+
+      |data_var_editor|
+
+    To change this to continuous, click on the measure type and select "Continuous" from the drop-down menu.
+    Similarly, to change the data type to decimal, click on the data type and select "Decimal" from the drop-down menu.
+
+      |data_var_editor_part_two|
+
+    Now jamovi treats this variable as a continuous variable.
+    This is important for performing analyses that require continuous data (such as a correlation or regression) or if we wish to perform mathematical operations on the variable (such as computing a z-score).
+
+Missing Values
+--------------
+    Often data will contain missing values, jamovi provides a number of options to handle missing values.
+    In jamovi, NaN (not a number or missing value) are represented as blank cells in the data view.
+    When performing analyses, jamovi will automatically exclude any cases with missing values on the variables being analysed (i.e., listwise deletion).
+
+    At times, numbers that are not in possible range of a variable may be used to indicate missing values (e.g., -99, 9999, etc.).
+    Through the variable editor, it is possible to specify values should be treated as missing values.
+    To do this, click on ``Missing values`` and a window will appear, click the plus sign with the following text ``Add Missing Value``.
+    Now, it is possible to specify when the source or rather the variable of interest has a value exactly, equal to, less than, or greater than a value, it should be treated as a missing value.
+    For example, below any values == 9999 will be treated as missing value:
+
+    |data_var_editor_missing_vals|
+
+    Now, when performing analyses, any cases with a value of 9999 on the variable of interest will be treated as missing and excluded from analyses.
+
+Adding Labels to Levels
+------------------------
+    For variables with a nominal or ordinal measure type, it is possible to add labels to the levels of the variable:
+    Below is a table of data with a variable called "Group" which has a nominal measure type and integer data type.
+
+      .. list-table:: Example of a Variable with Unlabeled Levels
+        :header-rows: 1
+
+        * - ID
+          - Group
+        * - 1
+          - 1
+        * - 2
+          - 2
+        * - 3
+          - 1
+        * - 4
+          - 2
+
+    The levels of 1 and 2 indicate whether the participant is a smoker or not, but these values are not very informative:
+    Through the data variable editor levels 1 and 2 are presented for this variable:
+
+      |data_var_recode_one|
+
+    By clicking on the 1 and 2 in our variable editor, meaningful labels can be assigned to these levels - such as "Smoker" and "Non-smoker", respectively:
+
+      |data_var_recode_two|
+
+
+    Allowing us to have a more informative variable with the following data:
+
+      .. list-table:: Example of a Variable with Labeled Levels
+        :header-rows: 1
+
+        * - ID
+          - Group
+        * - 1
+          - Smoker
+        * - 2
+          - Non-smoker
+        * - 3
+          - Smoker
+        * - 4
+          - Non-smoker
+
+    Now, when performing analyses, the labels "Smoker" and "Non-smoker" will be used instead of the values 1 and 2, making the results more informative and easier to interpret.
+
+    .. - Setting data type and measure type
+    .. - Missing values
+    .. - Adding labels to levels
     - Reordering levels
     - 'Retain unused levels in analyses'
     - Some existing content https://www.jamovi.org/user-manual.html#data-variables
@@ -490,7 +590,6 @@ Filtering Data
   For example, to filter based on Female Sex and Age of 30 and greater the following filter could be used: ``Sex == 'Female' and Age >= 30``.
   The same principles can be applied for ``or`` conditions as well and if wishing to filter on the same variable multiple times.
 
-
   Alternatively, an additional filter can be created by clicking the plus icon in the filter editor.
   A second filter will appear below the first, and by adding the desired filter criteria such as ``Age >= 30``, the data will be filtered based on both filters.
   Additionally, we can toggle each filter on and off by clicking the toggle and switching it to active or inactive:
@@ -510,7 +609,7 @@ Restructuring Data
 
 What is Wide vs Long Format?
 -----------------------------
-  Within data analysis, two common data structures are often required these are wide format and long format.
+  Within data analysis, two common data structures are often required these are *wide format* and *long format* .
   Wide format data is set up such that each row represents a participant, and repeated measurements are stored in separate columns (one column per outcome at each time point or condition).
   For example, below we have the quiz score of students during Weeks 2, 4, and 6 of Semester displayed in wide format:
 
@@ -583,26 +682,26 @@ What is Wide vs Long Format?
 How to Restructure Data in jamovi
 ----------------------------------
   To restructure data in jamovi (at this time) requires the jReshape module, which can be installed by clicking the plus icon in the top right of jamovi and searching for the module name ``jReshape``.
-  Once installed and loaded, the jReshape module provides the jtransform functionality which allows for restructuring data from wide to long format and vice versa.
+  Once installed and loaded, the jReshape module allows for the functionality to restructure data from wide to long format and vice versa.
   Under the ``Analyses`` tab, a new option called ``Data`` will appear which contains the jReshape options.
 
 Wide to Long:
-~~~~~~~~~~~~
+~~~~~~~~~~~~~
   To transform data from wide format to long format, click on ``Analyses`` tab, select ``Data``, and then from the dropdown select ``Wide to Long``.
   Here, take the columns that represent the repeated measurements (i.e., Score_Week_2, Score_Week_4, Score_Week_6) and move them into the ``Columns to row`` box.
   Below we have the option rename our new columns, under ``Target Variable`` rename this variable sensibly such as the name of the dependant variable (i.e., ``Score``).
   Additonaly, under ``Index Variable (conatins repeated levels values)`` this should be named something that indicates the condition or time point (i.e., ``Time``).
-  In the output window, check the preview of what the data will look like once transformed to long format is correct and sensible.
-  By clicking the blue ``Create`` button, jamovi will open a new jamovi window with the data set now transformed to long format.
+  In the output window, check the data preview (this shows what the data will look like once transformed).
+  If the preview is correct and sensible, click the blue ``Create`` button and jamovi will open a new jamovi window with the data set now transformed to long format.
 
 Long to Wide:
-~~~~~~~~~~~~
+~~~~~~~~~~~~~
   To transform data from long format to wide format in jamovi, click on ``Analyses`` tab, select ``Data``, and then from the dropdown select ``Long to Wide``.
   Here, move the variable that contains the variable of interest (i.e., ``Score``) into the ``Rows to Columns`` box.
   Next, choose the variable that identifies the repeated measurements time point or condition (i.e., ``Time``) and move this into the ``Indexing Variables`` box.
   To ensure the data is restructured correctly, we need to also move the variable that identifies the unique participant (i.e., ``ID``) into the ``ID Variable`` box.
-  In the right hand side output window, double-check the preview of what the data will look like once transformed to wide format is correct and sensible.
-  By clicking the blue ``Create`` button, jamovi will open a new jamovi window with the data set now transformed to wide format.
+  In the right hand side output window, double-check the data preview (this shows what the data will look like once transformed).
+  If the preview is correct and sensible, click the blue ``Create`` button and jamovi will open a new jamovi window with the data set now transformed to wide format.
 
 ===================
 Common Data Recipes
@@ -945,3 +1044,32 @@ Composing a date from parts
   :alt: How to toggle filter on and off in jamovi.
   :class: centered
   :width: 37%
+
+
+
+.. |data_var_editor| image:: /_images/ts_var_types_part_one.png
+  :alt: The data editor in jamovi where you can edit your data and create new variables.
+  :class: centered
+  :width: 42%
+
+
+.. |data_var_editor_part_two| image:: /_images/ts_var_types_part_two.png
+  :alt: The data editor in jamovi where you can edit your data and create new variables.
+  :class: centered
+  :width: 42%
+
+
+.. |data_var_editor_missing_vals| image:: /_images/ts_missing_val.png
+  :alt: The data editor in jamovi where you can edit your data and specify missing values.
+  :class: centered
+  :width: 42%
+
+.. |data_var_recode_one| image:: /_images/ts_recode_one.png
+  :alt: The data editor in jamovi where you can recode your variables using the recode option.
+  :class: centered
+  :width: 42%
+
+.. |data_var_recode_two| image:: /_images/ts_recode_two.png
+  :alt: The data editor in jamovi where you can recode your variables using the recode option.
+  :class: centered
+  :width: 42%
