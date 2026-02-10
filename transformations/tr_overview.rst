@@ -6,32 +6,39 @@ Overview
 
     When analysing data, it is common for data to come in in a somewhat messy format. It's often necessary to "tidy" and transform our data so that it is in a form suitable for our analyses. This may involve computing sum scores for each partipant, excluding outliers, recoding responses, transforming response variables to different scales, aggregation (such as computing mean response time for each participant), etc.
 
-    The following describes the various data manipulation and transformation facilities that jamovi provides.
+    When raw data is first brought or entered into jamovi, it is represented in columns called *Data Variables*. This data can be analysed as-is, but it's also possible to alter, recode and transform this data using *Computed Variables* and *Transformed Variables*. The fourth and final sort of column is *Filters*, used for filtering data such as outliers.
 
 ==============
 Data Variables
 ==============
-    Data variables are simply the columns and rows of data imported into jamovi. These are yet to be transformed or manipulated in any way.
-    They are the raw data, imported into jamovi for analysis.
+
+    Data variables are simply the columns and rows of data brought or entered into jamovi. They typically represent the "raw data" that we want to use as a basis for our analyses. Opening a .csv file, or entering values directly into the spreadsheet will result in these values being represented in data variables.
 
 Measure and Data Types
 ----------------------
+
     In jamovi, variables have a *Measure type* and a *Data type* to indicate the type of data contained in the variable and how it should be treated in analyses.
 
-    Measure types can be either:
-      - Continuous: numbers whereby any infinite possible value is meaningful, such as height or weight.
-      - Ordinal: numbers without decimal points, such as Likert scale responses, whereby it is illogical to have values between the integers, such as 2.5 on a single item response on a Likert scale.
-      - Nominal: text or categories.
-      - ID: unique identifiers for each row/participant.
-      .. Okay how do we get the nice little icons for these? like here: https://www.jamovi.org/user-manual.html#data-variables
-
     Data types can be either:
+
       - Integer: whole numbers without decimal points
       - Decimal: numbers with decimal points
-      - Text: strings of text that make up words or categories.
+      - Text: text, words, or "strings" that make up words or categories.
 
-    Typically the variable's data type and measure type are set automatically when data is imported.
-    Note, some combinations of data type and measure type are not possible (e.g., a variable cannot be both text and continuous, or decimal and nominal). A variable's data type and measure type can be changed as needed and at times will need to be changed to ensure analyses are performed correctly.
+    Note that jamovi does not support date and time data types at this time, however dates and times can be represented as text. Some basic date manipulations are described in Common Recipes *link* TODO.
+
+    Measure types are used to indicate the `level of measurement <https://en.wikipedia.org/wiki/Level_of_measurement>`__.
+
+      - |continuous_icon| Continuous: numbers where a continuum of values is meaningful, such as height, weight, counts.
+      - |ordinal_icon| Ordinal: discrete values where order is meaningful, i.e. 'Strongly agree', 'Agree' ... '< 18', '18-30', ...
+      - |nominal_icon| Nominal: discrete values with no meaningful order, i.e. Male, Female, ... 'Smoker', 'Non-smoker', ...
+      - |id_icon| ID: unique identifiers for each row/participant.
+
+    Note that the levels of measurement don't align perfectly with these types. jamovi follows a convention of combining *ratio* and *interval* into a single measure type *Continuous*. jamovi also provides an ID measure type for unique identifiers that are usually not analysed (i.e. Surname).
+
+    When data is first brought in, jamovi automatically assigns data types and measure types based on the form the data takes. Most of the time this automatic assignment will be correct, but there may be scenarios where the data type or measure type need to manually adjusted.
+
+    Note that some combinations of data type and measure type are not possible (e.g., a variable cannot be both text and continuous, or decimal and nominal).
 
     To change the data type and measure type of a variable, double click on the column header to open the variable editor.
     Here the variable's name, description, data type, and measure type can be seen and modified.
@@ -51,19 +58,17 @@ Measure and Data Types
 
 Missing Values
 --------------
-    Often data will contain missing values, jamovi provides a number of options to handle missing values.
-    In jamovi, NaN (not a number or missing value) are represented as blank cells in the data view.
-    When performing analyses, jamovi will automatically exclude any cases with missing values on the variables being analysed (i.e., listwise deletion).
 
-    At times, numbers that are not in possible range of a variable may be used to indicate missing values (e.g., -99, 9999, etc.).
-    Through the variable editor, it is possible to specify values should be treated as missing values.
-    To do this, click on ``Missing values`` and a window will appear, click the plus sign with the following text ``Add Missing Value``.
-    Now, it is possible to specify when the source or rather the variable of interest has a value exactly, equal to, less than, or greater than a value, it should be treated as a missing value.
-    For example, below any values == 9999 will be treated as missing value:
+    Often data will contain missing values, jamovi provides a number of options to handle missing values.
+    In jamovi, missing values are represented as blank cells in the data view.
+
+    Some data sets use special values to encode missing values, for example, they may use the value -99 or 9999. This data, left as-is, will be treated by analyses as actual values. In order for these to be treated as missing values, it's necessary to instruct jamovi to treat these values as missing.
+
+    With variable editor open, click on ``Missing values`` and a window will appear, click the ``Add Missing Value`` button.     Now, it is possible to specify when the source or rather the variable of interest has a value exactly, equal to, less than, or greater than a value, it should be treated as a missing value.
+
+    For example, the formula of ``== 9999`` shown below means that any values equal to 9999 will be treated as missing values.
 
     |data_var_editor_missing_vals|
-
-    Now, when performing analyses, any cases with a value of 9999 on the variable of interest will be treated as missing and excluded from analyses.
 
 Adding Labels to Levels
 ------------------------
@@ -112,12 +117,8 @@ Adding Labels to Levels
 
     Now, when performing analyses, the labels "Smoker" and "Non-smoker" will be used instead of the values 1 and 2, making the results more informative and easier to interpret.
 
-    .. - Setting data type and measure type
-    .. - Missing values
-    .. - Adding labels to levels
-    - Reordering levels
-    - 'Retain unused levels in analyses'
-    - Some existing content https://www.jamovi.org/user-manual.html#data-variables
+    - TODO Reordering levels
+    - TODO 'Retain unused levels in analyses'
 
 .. _computed-variables:
 
@@ -672,21 +673,23 @@ What is Wide vs Long Format?
       * - 3
         - Week_6
         - 52
-.
+
   As shown above, Score is now a single column with all Score values stacked, and Time is a separate variable that indicates the Week of measurement (e.g., Week_2, Week_4, Week_6).
   Using long format makes it easy to summarise, plot, and model change over time because time is represented explicitly as data rather than being embedded in column names.
   Long format is also required for mixed modelling, by having the data in long format, we can easily specify both fixed effects (e.g., the effect of time on quiz scores) and random effects (e.g., individual differences between students).
 
   When working with data, it is often necessary to restructure the data from a wide format to a long format or vice versa. Below is a guide on how to restructure data in jamovi.
 
-How to Restructure Data in jamovi
-----------------------------------
+Restructuring with jReshape
+---------------------------
+
   To restructure data in jamovi (at this time) requires the jReshape module, which can be installed by clicking the plus icon in the top right of jamovi and searching for the module name ``jReshape``.
   Once installed and loaded, the jReshape module allows for the functionality to restructure data from wide to long format and vice versa.
   Under the ``Analyses`` tab, a new option called ``Data`` will appear which contains the jReshape options.
 
-Wide to Long:
-~~~~~~~~~~~~~
+Wide to Long
+~~~~~~~~~~~~
+
   To transform data from wide format to long format, click on ``Analyses`` tab, select ``Data``, and then from the dropdown select ``Wide to Long``.
   Here, take the columns that represent the repeated measurements (i.e., Score_Week_2, Score_Week_4, Score_Week_6) and move them into the ``Columns to row`` box.
   Below we have the option rename our new columns, under ``Target Variable`` rename this variable sensibly such as the name of the dependant variable (i.e., ``Score``).
@@ -694,8 +697,9 @@ Wide to Long:
   In the output window, check the data preview (this shows what the data will look like once transformed).
   If the preview is correct and sensible, click the blue ``Create`` button and jamovi will open a new jamovi window with the data set now transformed to long format.
 
-Long to Wide:
-~~~~~~~~~~~~~
+Long to Wide
+~~~~~~~~~~~~
+
   To transform data from long format to wide format in jamovi, click on ``Analyses`` tab, select ``Data``, and then from the dropdown select ``Long to Wide``.
   Here, move the variable that contains the variable of interest (i.e., ``Score``) into the ``Rows to Columns`` box.
   Next, choose the variable that identifies the repeated measurements time point or condition (i.e., ``Time``) and move this into the ``Indexing Variables`` box.
@@ -742,7 +746,7 @@ There are two useful date functions, ``DATEVALUE()`` and ``DATE()``, that can be
         - 06/29/81
 
 Computing a date in the future
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The following example converts a date to an integer, adds 7 (representing 7 days), and then converts it back to a date string.
 
@@ -767,7 +771,7 @@ The following example converts a date to an integer, adds 7 (representing 7 days
         - 2025-08-29
 
 Computing days elapsed
-^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~
 
     .. list-table:: Computing days elapsed
       :header-rows: 1
@@ -786,7 +790,7 @@ Computing days elapsed
         - -498
 
 Extracting month, year, or day
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The ``SPLIT()`` function can be used to extract the year, month, or day of month, from a date string. The ``SPLIT()`` function takes a text value (such as a date string), splits it into chunks using the second argument as the delimeter, and returns the nth chunk, determined by the third argument. Note that ``SPLIT()`` returns a text value, which will needs to be converted to an integer (with the ``INT()`` function) if to be used in arithmetic.
 
@@ -811,7 +815,7 @@ The ``SPLIT()`` function can be used to extract the year, month, or day of month
         - 22
 
 Composing a date from parts
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     .. list-table:: Composing a date from parts
       :header-rows: 1
@@ -832,176 +836,6 @@ Composing a date from parts
         - 08
         - 22
         - 2025-08-22
-
-.. .. list-table:: Transformations Easily Accesible in jamovi
-..    :header-rows: 1
-
-..    * - Transformation
-..      - Definition
-..      - Found Under
-..      - Function in jamovi
-..      - Example Use Case
-..    * - z-score (standard score) so scale and z do the same thing - why do we have both in jamovi?
-..      -  A `z-score <https://en.wikipedia.org/wiki/Standard_score>`_ (or standard score) is the number of standard deviations a raw value is from the overall mean of the variable being measured. The z-score transformation standardises your variable, so it has a mean of 0 and a standard deviation of 1.
-..      - Statistical
-..      - `Z`
-..      - Z(variable_name)
-..    * - Standard score (z-score) Do we even want this? - we already have z-score...?
-..      -  A `z-score <https://en.wikipedia.org/wiki/Standard_score>`_ or standard score is the number of standard deviations a raw value is from the overall mean of the variable being measured. The z-score transformation standardises your variable, so it has a mean of 0 and a standard deviation of 1.
-..      - Statistical
-..      - `SCALE`
-..      - SCALE(variable_name)
-..    * - Logarithmic 10
-..      - `Logarithmic 10 <https://doi.org/10.1177/00045632211050531>`_ transformation involves taking the logarithm of each value in a dataset to compress large numbers and expand small numbers.
-..      - Math
-..      - `LOG10`
-..      - LOG10(variable_name)
-..    * - Natural Logarithmic
-..      -  A `Natural Logarithmic <https://doi.org/10.1177/00045632211050531>`_ transformation involves taking the natural logarithm (base e) of each value in a dataset, similarly to the logarithmic 10 transformation it is used to reduce right skewness, stabilise variance, and make data more normally distributed.
-..      - Math
-..      - `LN`
-..      - LN(variable_name)
-..    * - Square Root
-..      - A `Square Root <https://en.wikipedia.org/wiki/Square_root>`_ transformation takes the square root of a variable. This transformation is often used on non-negative count data to reduce right skewness, stabilise variance, and ensure the data is normally distributed.
-..      - Math
-..      - `SQRT`
-..      - SQRT(variable_name)
-..    * - Exponential
-..      - An `exponential <https://en.wikipedia.org/wiki/Exponential_function>`_ transformation raises a constant (often e or 10) to the power of each value, which turns differences in the original variable into multiplicative changes. Small increases become much larger on the transformed scale, and larger values are amplified the most.
-..      - Math
-..      - `EXP`
-..      - EXP(variable_name)
-..    * - Box-Cox
-..      - A `Box–Cox transformation <https://en.wikipedia.org/wiki/Power_transform#Box%E2%80%93Cox_transformation>`_ finds an exponent (λ) to make the distribution of your data closer to normal and make it's variance more stable; it can only be used for positive continuous data typically when the data are skewed or show non-constant spread.
-..      - Statistical
-..      - `BOXCOX`
-..      - BOXCOX(variable_name)
-..    * - Interquartile Range
-..      - The Interquartile Range tells you how spread out the middle 50% of your data is by calculating Q3 minus Q1. It is useful because it can help flag unusually low or high scores using the common boxplot rule of values below Q1 minus 1.5 times the IQR or above Q3 plus 1.5 times the IQR.
-..      - Statistical
-..      - `IQR`
-..      - IQR(variable_name)
-..    * - Ranking
-..      - `Ranking <https://en.wikipedia.org/wiki/Ranking_(statistics)>`_ assigns an ordinal rank to each value in a dataset based on its position relative to other values. The smallest value receives the rank of 1, the next smallest receives rank 2, and so on. This transformation is useful for non-parametric analyses or when you want to focus on the order of values rather than their actual magnitudes.
-..      - Statistical
-..      - `Rank`
-..      - RANK(variable_name)
-..    * - Rounding
-..      - `Rounding <https://en.wikipedia.org/wiki/Rounding>`_ a variable involves adjusting each value to a specified number of decimal places or to the nearest whole number. This transformation is often used to simplify data presentation, reduce precision for reporting purposes, or prepare data for certain analyses that require integer values.
-..      - Statistical
-..      - `ROUND` Note that the 3 in the example use case rounds `variable_name` to 3 decimal places. This can be adjusted to say 1 or 2 for 1 or 2 decimal places respectively, or to 0 for whole numbers.
-..      - ROUND(variable_name, 3)
-..    * - Absolute
-..      - Taking the `absolute value <https://en.wikipedia.org/wiki/Absolute_value>`_ simply converting all negative values in a dataset to their positive counterparts, while leaving positive values unchanged. This transformation is often used to focus on the magnitude of values without regard to their direction (ignoring whether values are positive or negative).
-..      - Math
-..      - `ABS`
-..      - ABS(variable_name)
-..    * - Absolute Interquartile Range
-..      - The Absolute Interquartile Range tells you how spread out the middle 50% of your data is by calculating Q3 minus Q1. It is useful because it can help flag unusually low or high scores using the common boxplot rule of values below Q1 minus 1.5 times the IQR or above Q3 plus 1.5 times the IQR.
-..      - Statistical
-..      - `ABSIQR`
-..      - ABSIQR(variable_name)
-..    * - Absolute z-score (or Absolute standard score)
-..      - The number of absolute standard deviations a raw value is from the overall mean of the variable being measured. The z-score transformation standardises your variable, so it has a mean of 0 and a standard deviation of 1, the absolute z-score takes the absolute value of this transformation ignoring the sign.
-..      - Statistical
-..      - `ABSZ`
-..      - ABSZ(variable_name)
-..    * - Floor
-..      - The `Floor <https://en.wikipedia.org/wiki/Floor_and_ceiling_functions>`_  function essentially takes a real number and returns the greatest integer that is less than that number, effectively rounding down to the nearest whole number.
-..      - Statistical
-..      - `FLOOR`
-..      - FLOOR(variable_name)
-..    * - Ceiling
-..      - The `Ceiling <https://en.wikipedia.org/wiki/Floor_and_ceiling_functions>`_ function takes a real number and returns the smallest integer that is greater than or equal to that number, effectively rounding up to the nearest whole number.
-..      - Statistical
-..      - `CEILING`
-..      - CEILING(variable_name)
-..    * - Mininum
-..      - `Mininum or Min values <https://en.wikipedia.org/wiki/Maximum_and_minimum>`_ are the lowest values in a row or column of data, this transformation can be used when you want to identify the highest score across multiple variables for each participant or row of data.
-..      - Statistical
-..      - `MIN`
-..      - MIN(variable_name, variable_name_2)
-..    * - Maximum
-..      - `Maximum or Max values <https://en.wikipedia.org/wiki/Maximum_and_minimum>`_ are simply the highest values in a row or column of data, this transformation can be used when you want to identify the highest score across multiple variables for each participant or row of data.
-..      - Statistical
-..      - `MAX`
-..      - MAX(variable_name, variable_name_2, variable_name_3)
-..    * - Standard deviation
-..      - `Standard deviation <https://en.wikipedia.org/wiki/Standard_deviation>`_ is a measure of the amount of variation or dispersion in a set of values. A low standard deviation indicates that the values tend to be close to the mean (average) of the set, while a high standard deviation indicates that the values are spread out over a wider range.
-..      - Statistical
-..      - `STDEV`
-..      - STDEV(variable_name, variable_name_2)
-..    * - Summation
-..      - `Summation or Sum <https://en.wikipedia.org/wiki/Summation>`_ calculates the total of items (or columns of data) by adding them together. Typically used to aggregate scores across multiple items in a scale for a total score.
-..      - Statistical
-..      - `SUM`
-..      - SUM(variable_name, variable_name_2, variable_name_3, variable_name_4)
-..    * - Participant Mean
-..      - Calculates the `mean (average) <https://en.wikipedia.org/wiki/Mean>`_ score across multiple variables for each participant or row of data. Typically used when you have multiple items measuring the same construct and you wish to create a composite score for each participant.
-..      - Statistical
-..      - `MEAN`
-..      - MEAN(variable_name, variable_name_2, variable_name_3, variable_name_4)
-..    * - Reverse Scoring
-..      - To catch `acquiescence response bias <https://en.wikipedia.org/wiki/Acquiescence_bias>`_ (participants who aways agree or disgree in self-report) `reverse-coded items <https://en.wikipedia.org/wiki/Acquiescence_bias>`_ are used, which requires them to be `Reverse Scored <https://en.wikipedia.org/wiki/Acquiescence_bias>`_. Reverse scoring ensures that all items are aligned in the same direction before creating a total or composite score.
-..      - Custom
-..      - Requires manually choosing the maximum value possible value of this item (plus one) and subtract the items score from this value. In this example, we will imagine we have data with a 5-point likert scale. Perhaps we have on item that is reverse coded, so we would create a new transformed variable with the function `6 - $source` or `6 - variable_name` to reverse code the item.
-..      - 6 - variable_name
-..    * - Recoding items (from strings or words into different strings or words).
-..      - `Recoding <https://en.wikipedia.org/wiki/Data_recode>`_ involves changing the values or strings of a variable based on specified criteria. Recoding items is often used to group categories, create binary variables, or collapse levels in your independent variable for analysis.
-..      - Custom
-..      - Requires manually specifying the recoding criteria using "if then" statements. For example, perhaps you have a column of data indicating the Smoking habits of your participants from Daily, Weekly, Monthly, Occasionally, and Never. Perhaps you want to recode this into a binary variable indicating whether participants are smokers (Daily, Weekly, Monthly) or non-smokers ('Never'). You could use the following: IF(`variable_name` == "Never", "non-smoker", "smoker")
-..      - IF(`variable_name` == "Never", "non-smoker", "smoker")
-..    * - Recoding items (from numbers to strings or words).
-..      - `Recoding <https://en.wikipedia.org/wiki/Data_recode>`_ involves changing the values or strings of a variable based on specified criteria. Recoding items is often used to group categories, create binary variables, or collapse levels in your independent variable for analysis.
-..      - Custom
-..      - Requires manually specifying the recoding criteria using "if then" statements. For example, perhaps you have a column of data asking participants to rate their pain on a scale from 1 to 5, where 1 is 'no pain' and 5 is 'extreme pain'. You might want to recode these numerical ratings into descriptive categories such as 'low', 'moderate', and 'high' pain levels. You could use the following: IF(variable_name <=2, 'low',IF(variable_name == 3, 'moderate', 'high')). Generally, this kind of complicated recoding (using nested IF statements) is easier done via the `New Transformed Variable` option.
-..      - IF(variable_name <=2, 'low',IF(variable_name == 3, 'moderate', 'high')).
-
-
-..     In jamovi there are two main routes to perform manipulations and transformations of data; ``Computed variables`` and ``Transformed variables``.
-..     ``Computed variables`` are the simpler of the two, and are best when you want to manipulate or transform a single column of data (or generate a simulated column of data), where as
-
-
-    Using the ``New Computed Variable`` option, you could use the following::
-
-..         IF(`variable_name` == "Never", "non-smoker", "smoker")
-
-..     This would create a new column with the values recoded as smoker and non-smoker.
-..     In contrast, using the ``New Transformed Variable`` option, you would click ``Source variable`` and select `variable_name`.
-..     Then click ``using transform``, followed by ``create new``.
-..     Next to the plus symbol, click ``Add recode condition``.
-..     This allows you to recode your variable using the same if/then logic in a more user-friendly way.
-..     Additionally, this same manipulation can be saved for later if you have a similar column of data to recode.
-..     The same applies for transformations: the ``New Transformed Variable`` option allows you to save and re-apply the same transformation to additional columns seamlessly.
-
-..     More information on both the ``New Computed Variable`` and ``New Transformed Variable`` options can be found `here <https://docs.jamovi.org/_pages/um_4_spreadsheet.html>`_.
-..     For additional information on the ``New Transformed Variable`` option (especially for transforming multiple variables), see this `blog post <https://blog.jamovi.org/index.php/2021/08/12/transforming-multiple-variables-in-jamovi/>`_.
-..     With that out of the way,
- below are more details on the common manipulations and transformations made accessible in jamovi.
-
-.. ===========================================================
-.. Common Data Manipulations and Transformations using jamovi
-.. ===========================================================
-..     Below we provide a summary table of the common data manipulations and transformations made possible using jamovi.
-..     We provide a brief definition of each manipulation and transformation, where to find it in jamovi (or if it requires custom inputs), the function to be called, and an example use case of this function.
-..     For each use case we have used 'variable_name' as a placeholder for the name of your variable or column of data.
-..     At times, you may want to use multiple columns of data within a manipulation or transformation, such as calculating the participant's mean or the summation across a range of scale items.
-..     Therefore, in the example use cases below we will refer to additional columns of data as 'variable_name_2', 'variable_name_3' and so on.
-..     Hopefully your naming conventions are better than ours, but at least this should make the example use cases clear and easy to follow.
-
-..     Below, we provide a summary table of common data manipulations and transformations available in jamovi.
-..     For each manipulation or transformation, we include a brief definition, where to find it in jamovi (or whether it requires custom input), the function to call, and an example use case.
-..     In each use case, we use `variable_name` as a placeholder for the name of your variable (i.e., your column of data).
-..     Sometimes you may want to use multiple columns within a single manipulation or transformation, such as calculating across a set of scale items each participant's mean or their summed scores.
-..     For this reason, the example use cases below refer to additional columns as `variable_name_2`, `variable_name_3`, and so on.
-..     Hopefully your naming conventions are better than ours, but this should keep the examples clear and easy to follow.
-
-.. =================================================
-.. How to turn your data from wide to long format
-.. =================================================
-
-..     Placeholder information, more to come...
-
 
 
 .. toctree::
@@ -1073,3 +907,19 @@ Composing a date from parts
   :alt: The data editor in jamovi where you can recode your variables using the recode option.
   :class: centered
   :width: 42%
+
+.. |continuous_icon| image:: /_images/variable-continuous.svg
+  :alt: Integer type icon
+  :height: 18px
+
+.. |nominal_icon| image:: /_images/variable-nominal.svg
+  :alt: Integer type icon
+  :height: 18px
+
+.. |ordinal_icon| image:: /_images/variable-ordinal.svg
+  :alt: Integer type icon
+  :height: 18px
+
+.. |id_icon| image:: /_images/variable-id.svg
+  :alt: Integer type icon
+  :height: 18px
