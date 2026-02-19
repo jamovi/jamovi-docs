@@ -117,8 +117,69 @@ Adding Labels to Levels
 
     Now, when performing analyses, the labels "Smoker" and "Non-smoker" will be used instead of the values 1 and 2, making the results more informative and easier to interpret.
 
-    - TODO Reordering levels
-    - TODO 'Retain unused levels in analyses'
+
+Reordering Levels
+------------------------
+    For Ordinal Data (and at times Nominal Data), we may wish to "reorder" the levels in which the data appear in Figures and Tables.
+
+    Below is an example table of descriptive data computed via jamovi to begin inferring differences within a data set.
+
+      .. list-table:: Example Descriptives Table with Levels Unordered
+        :header-rows: 1
+
+        * - Task Difficulty
+          - Mean
+          - Standard Deviation
+        * - Low
+          - 85.1
+          - 9.5
+        * - High
+          - 54.3
+          - 9.1
+        * - Medium
+          - 73.6
+          - 9.3
+
+
+    Each row represents one of three levels of Task Difficulty (Low, Medium, High) in a Memory Task, with columns to indicate the Mean and Standard deviation.
+    However, the order in which the rows are presented is unintuitive, the High condition is in the middle and the natural order is interrupted.
+
+    Jamovi can allow for the reordering of variables, so in all future Tables and Figures the levels appear in a more intuitive order; Low, Medium, then High.
+    To do this, double click on variable of interest to open the variable editor.
+    Here, the Levels (such as the Low, High, and Medium) for a Variable (like Task Difficulty) can be seen:
+
+    |ts_table_reorder_me|
+
+    Click on the level to reorder and use the arrow keys to move the level to an appropriate location in the heirarchy (the level at the top will be positoned at the left most or top position and bottom level will be position in the right most or lowest position for all future tables and figures):
+
+    |ts_table_reordered|
+
+    The descriptive table (and any following figures) will present the levels in the same order as indicated in the variable editor.
+    For example, the table below now displays each level of Task Difficulty from Low to High in an intuitive fashion.
+
+      .. list-table:: Example Descriptives Table with Levels Reordered
+        :header-rows: 1
+
+
+        * - Task Difficulty
+          - Mean
+          - Standard Deviation
+        * - Low
+          - 85.1
+          - 9.5
+        * - Medium
+          - 73.6
+          - 9.3
+        * - High
+          - 54.3
+          - 9.1
+
+    The natural order of the conditions is now preserved, moving down each row it appears a Low, Medium, then High, making the table easier to read and interpret.
+
+
+  - TODO 'Retain unused levels in analyses'
+
+
 
 .. _computed-variables:
 
@@ -392,7 +453,9 @@ To compute the mean score of the outcome variable for each Dosage group separate
      - Interquartile Range: Returns values of 0 to indicate a number is within the box of a boxplot and values larger than 1.5 to indicate the number is outside the whiskers.
      - `More info <https://en.wikipedia.org/wiki/Interquartile_range>`__
    * - | ``MAX(var)``
+       | ``MAX(var_1, var_2, ...)``
        | ``VMAX(var)``
+       | ``VMAX(var, group_by = other_var)``
      - Maximum: identifies the highest value in a row or column of data.
      - `More info <https://en.wikipedia.org/wiki/Maximum_and_minimum>`__
    * - ``MAXABSIQR(var)``
@@ -402,11 +465,15 @@ To compute the mean score of the outcome variable for each Dosage group separate
      - Maximum Absolute Z-Score: Convenience short-hand for ``MAX(ABSZ( variable 1, variable 2, … ))``.
      - `More info <https://en.wikipedia.org/wiki/Standard_score>`__
    * - | ``MEAN(var)``
+       | ``MEAN(var_1, var_2, ...)``
        | ``VMEAN(var)``
+       | ``VMEAN(var, group_by = other_var)``
      - Mean: Calculate the mean score across a row or column of data.
      - `More info <https://en.wikipedia.org/wiki/Mean>`__
    * - | ``MIN(var)``
+       | ``MIN(var_1, var_2, ...)``
        | ``VMIN(var)``
+       | ``VMIN(var, group_by = other_var)``
      - Minimum: identifies the lowest value in a row or column of data.
      - `More info <https://en.wikipedia.org/wiki/Maximum_and_minimum>`__
    * - ``RANK(var)``
@@ -419,33 +486,44 @@ To compute the mean score of the outcome variable for each Dosage group separate
      - Scale: Returns the normalized values of a set of numbers - synonym for ``Z(var)``.
      - `More info <https://en.wikipedia.org/wiki/Standard_score>`__
    * - | ``STDEV(var)``
+       | ``STDEV(var_1, var_2, ...)``
        | ``VSTDEV(var)``
+       | ``VSTDEV(var, group_by = other_var)``
      - Standard deviation: measures the amount of standard deviation in a row or column of data.
      - `More info <https://en.wikipedia.org/wiki/Standard_deviation>`__
    * - | ``SUM(var)``
+       | ``SUM(var_1, var_2, ...)``
        | ``VSUM(var)``
+       | ``VSUM(var, group_by = other_var)``
      - Summation: Returns the sum of a row or column of data.
      - `More info <https://en.wikipedia.org/wiki/Summation>`__
-   * - ``VMAD(var)``
+   * - | ``VMAD(var)``
+       | ``VMAD(var, group_by = other_var)``
      - Median Absolute Deviation: Returns the median absolute deviation of a variable.
      - `More info <https://en.wikipedia.org/wiki/Median_absolute_deviation>`__
-   * - ``VMADR(var)``
+   * - | ``VMADR(var)``
+       | ``VMADR(var, group_by = other_var)``
      - Robust Median Absolute Deviation: Returns the robust median absolute deviation of a variable.
      - `More info <https://en.wikipedia.org/wiki/Median_absolute_deviation>`__
-   * - ``VMED(var)``
+   * - | ``VMED(var)``
+       | ``VMED(var, group_by = other_var)``
      - Median: Returns the median of a variable.
      - `More info <https://en.wikipedia.org/wiki/Median>`__
-   * - ``VMODE(var)``
+   * - | ``VMODE(var)``
+       | ``VMODE(var, group_by = other_var)``
      - Mode: Returns the most common value, or mode, in a variable.
      - `More info <https://en.wikipedia.org/wiki/Mode_(statistics)>`__
-   * - ``VN(var)``
+   * - | ``VN(var)``
+       | ``VN(var, group_by = other_var)``
      - Sample Size (or n): Returns the number of cases in a variable.
      - `More info <https://en.wikipedia.org/wiki/Sample_size_determination>`__
-   * - ``VSE(var)``
+   * - | ``VSE(var)``
+       | ``VSE(var, group_by = other_var)``
      - Standard Error: Returns the standard error of a variable.
      - `More info <https://en.wikipedia.org/wiki/Standard_error>`__
    * - | ``VAR(var)``
        | ``VVAR(var)``
+       | ``VVAR(var, group_by = other_var)``
      - Variance: Returns the variance of a row or column of data.
      - `More info <https://en.wikipedia.org/wiki/Variance>`__
    * - ``Z(var)``
@@ -923,3 +1001,15 @@ Composing a date from parts
 .. |id_icon| image:: /_images/variable-id.svg
   :alt: Integer type icon
   :height: 18px
+
+
+.. |ts_table_reordered| image:: /_images/ts_reordered_table.png
+  :alt: The data editor in jamovi where you can reorder the levels in your variable to be more intuitive: Low, Medium, High.
+  :class: centered
+  :width: 42%
+
+
+.. |ts_table_reorder_me| image:: /_images/ts_unordered_table.png
+  :alt: The data editor in jamovi where you can reorder the levels in your variable to be more intuitive - currently they appear in an unusual order: Low, High, Medium.
+  :class: centered
+  :width: 42%
