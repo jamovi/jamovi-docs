@@ -439,7 +439,7 @@ To compute the mean score of the outcome variable for each Dosage group separate
      - `More info <https://en.wikipedia.org/wiki/Interquartile_range>`__
    * - ``ABSZ(var)``
      - Absolute z-score: Convenience short-hand for ``ABS(Z(var))``
-     -  `More info <https://en.wikipedia.org/wiki/Standard_score>`__
+     - `More info <https://en.wikipedia.org/wiki/Standard_score>`__
    * - ``BOXCOX(var)``
      - Box Cox: Returns a Box Cox transformation of the variable.
      - `More info <https://en.wikipedia.org/wiki/Power_transform#Box%E2%80%93Cox_transformation>`__
@@ -568,11 +568,11 @@ To compute the mean score of the outcome variable for each Dosage group separate
    * -
      - **REFERENCE FUNCTIONS**
      -
-   * - ``HLOOKUP(index, value_1, value_2, ...)``
-     - Why would anyone use this? WTF DOES THIS EVEN MEAN: The value in the provided values at index.
+   * - ``HLOOKUP(index, var_1, var_2, ...)``
+     - Returns the values in the rows, specified by index, from the provided variables.
      -
-   * - ``MATCH(value, value_1, value_2, ...)``
-     - Why would anyone use this? WTF DOES THIS EVEN MEAN: The index of value in the provided values.
+   * - ``MATCH(var, value_1, value_2, ...)``
+     - Returns the row index of the variable of interest that matches the value provided.
      -
    * -
      - **MISC. FUNCTIONS**
@@ -789,16 +789,380 @@ Long to Wide
 Common Data Recipes
 ===================
 
-TODO
+Two common approaches for identifying and removing outliers are the IQR method and the Z-score method.
 
-  - Excluding outliers
-  - Reverse scoring survey items
-  - Computing a sum score (say an extraversion questionaire)
-  - Recoding a continuous variable to categories
-  - Recoding/reducing the number of categories
-  - Split by functionality (jamovi does this poorly)
-  - Analysing a subset of data
-  - String concatenation
+Excluding Outliers (IQR)
+------------------------
+
+For the IQR method, values that are greater than 1.5 times the interquartile range (IQR) above the third quartile or below the first quartile are considered outliers (of course more strict or lenient thresholds can be applied).
+Any values outside this range should be filtered out of an analysis, see `here <https://en.wikipedia.org/wiki/Interquartile_range#Outliers>`__ for more info.
+
+For example, the data below has two columns one for Memory Score Performance and another for the Absolute IQR of the Memory Score Performance variable.
+The last two rows of the data show extreme outlier values of 15 and 98 for Memory Score Performance, which have Absolute IQR values of 9.05 and 5.05 respectively, indicating that they are outside the whiskers of a boxplot and should be filtered out of analyses.
+
+
+    .. list-table:: Memory Scores Pre Filtering (ABSIQR) for Outliers
+      :header-rows: 1
+
+      * - Memory_Score
+        - ABSIQR(Memory_Score)
+      * - 68
+        - 0
+      * - 66
+        - 0
+      * - 70
+        - 0
+      * - ...
+        - ...
+      * - 15
+        - 9.05
+      * - 98
+        - 5.05
+
+To exclude these outliers from analyses, a filter can be created using the ABSIQR() function in the filter expression:
+``ABSIQR(Memory_Score)<1.5``
+
+This filter will include only those rows where the Absolute IQR value is less than 1.5 and thererfore exclude the outliers greater than or equal to 1.5:
+
+    .. list-table:: Memory Scores Post Filtering (ABSIQR) for Outliers
+      :header-rows: 1
+
+      * - Filter 1
+        - Memory_Score
+        - ABSIQR(Memory_Score)
+      * - ✔
+        - 68
+        - 0
+      * - ✔
+        - 66
+        - 0
+      * - ✔
+        - 70
+        - 0
+      * - ✔
+        - ...
+        - ...
+      * - ✘
+        - 15
+        - 9.05
+      * - ✘
+        - 98
+        - 5.05
+
+As shown above, the filter has excluded the two outliers (15 and 98) with an additional column with crosses to indicate exclusion (excluded rows will also appear as grey/transparent in the data view).
+Only the non-outlier values (68, 66, 70, etc.) are included in analyses and visualisations, as indicated by ticks in the first column above.
+
+
+Excluding Outliers (Z-Score)
+----------------------------
+For the Z-score method, often values that have a z-score +/- 3 are considered outliers and removed for analyses (more lenient or strict thresholds can be applied).
+
+For example, below is a data set with a column for Memory Score Performance and another for the Absolute Z-Score of the Memory Score Performance variable.
+
+    .. list-table:: Memory Scores Pre Filtering (ABSZ) for Outliers
+      :header-rows: 1
+
+      * - Memory_Score
+        - ABSZ(Memory_Score)
+      * - 68
+        - 1.08
+      * - 66
+        - 0.93
+      * - 70
+        - 1.23
+      * - ...
+        - ...
+      * - 15
+        - 3.01
+      * - 98
+        - 3.43
+
+
+The last two rows of the data show outlier values of 15 and 98 for Memory Score Performance, which have Absolute Z-Score values of 3.01 and 3.43 respectively, indicating that they are outliers and should be filtered out of analyses.
+To exclude the rows with outliers, the following filter can be used:
+``ABSZ(Memory_Score)<3``
+
+    .. list-table:: Memory Scores Post Filtering (ABSZ) for Outliers
+      :header-rows: 1
+
+      * - Filter 1
+        - Memory_Score
+        - ABSZ(Memory_Score)
+      * - ✔
+        - 68
+        - 1.08
+      * - ✔
+        - 66
+        - 0.93
+      * - ✔
+        - 70
+        - 1.23
+      * - ✔
+        - ...
+        - ...
+      * - ✘
+        - 15
+        - 3.01
+      * - ✘
+        - 98
+        - 3.43
+
+As shown above, the filter has excluded the two outliers (15 and 98) with an additional column with crosses to indicate exclusion (excluded rows will also appear as grey/transparent in the data view).
+Only the non-outlier values (68, 66, 70, etc.) are included in analyses and visualisations, as indicated by ticks in the first column above.
+
+
+Reverse Scoring Survey Items
+----------------------------
+When handling survery data, it is common to have some items that are reverse scored.
+A simple rule of thumb for reverse scoring is to subtract the item score from the maximum possible score plus one.
+
+For example, below is a table of data in which participants have responded on a 1-7 Likert scale to three items (Item_1, Item_2, and Item_3) that are intended to measure the same construct, but Item_3 is scored such that higher scores indicate less of the construct being measured.
+
+    .. list-table:: Data Pre-Reverse Scoring Survey Item
+       :header-rows: 1
+
+       * - Item_1
+         - Item_2
+         - Item_3
+       * - 4
+         - 3
+         - 3
+       * - 3
+         - 4
+         - 5
+       * - 4
+         - 4
+         - 2
+
+
+To reverse score Item_3, click a new column and choose `New Computed Variable` and use the following:
+``8 - Item_3``
+Alternatively, if reverse scoring needs to be applied to multiple items, click a new column and choose `New Transformed Variable`, choose the item to be reverse score in the Source variable box.
+Next click, using transformation and choose `Create New Transform...` and use the following formula:
+``8 - $SOURCE``
+
+
+.. list-table:: Data Post-Reverse Scoring Survey Item
+   :header-rows: 1
+
+   * - Item_1
+     - Item_2
+     - Item_3
+     - Item_3_Reverse_Scored
+   * - 4
+     - 3
+     - 3
+     - 4
+   * - 3
+     - 4
+     - 6
+     - 1
+   * - 4
+     - 4
+     - 2
+     - 5
+
+Once applied the new column (Item_3_Reverse_Scored) will contain the reverse scored values (of Item_3), values of 1 become 7, values of 2 become 6, values of 3 become 5, and so on.
+Now higher scores on Item_3_Reverse_Scored indicate more of the construct being measured and lower scores indicate less of the construct being measured, which is consistent with the scoring of Item_1 and Item_2.
+This is a particularly important step to ensure that all items are scored in the same direction before computing a sum score or mean score across items, otherwise the resulting overall score may not accurately reflect the construct being measured.
+
+Acquiescent Response Bias
+-------------------------
+How to remove/fix...
+*Insert info here***
+
+
+
+Sum Score of Survey Items
+-------------------------
+Sum scores are often computed across multiple items of survey responses to create an overall score for a construct being measured, often to correlate with other variables or compare between conditions.
+For example, personality questionnaires use multiple items to measure a single personality trait - such as Extraversion.
+By computing a sum score across those survey items, an overall score (in this case Extraversion Score) can be created for each participant (see `here <https://doi.org/10.1016/j.jrp.2006.02.001>`__  for more info on personality scales).
+
+Below is a table of responses to several items of the subscale of Extraversion, where each item is scored on a 1-5 Likert scale:
+
+    .. list-table:: Data Pre-Summation of Extraversion Items
+       :header-rows: 1
+
+       * - Item_1
+         - Item_6
+         - Item_11
+         - Item_16
+       * - 5
+         - 1
+         - 3
+         - 3
+       * - 4
+         - 2
+         - 1
+         - 1
+       * - 4
+         - 2
+         - 4
+         - 5
+
+To compute a sum score across these items, click a new column and choose `New Computed Variable`.
+By using the SUM() function and choosing the variables (or rather items) of interest, the following formula can be used to compute the sum score:
+``SUM(Item_1, Item_6, Item_11, Item_16)``
+
+
+    .. list-table:: Data Post-Summation of Extraversion Items
+       :header-rows: 1
+
+       * - Item_1
+         - Item_6
+         - Item_11
+         - Item_16
+         - Extraversion_Sum_Score
+       * - 5
+         - 1
+         - 3
+         - 3
+         - 12
+       * - 4
+         - 2
+         - 1
+         - 1
+         - 8
+       * - 4
+         - 2
+         - 4
+         - 5
+         - 15
+
+
+As shown above, the new column (Extraversion_Sum_Score) contains the sum score across the items (of Extraversion) with each row indicating the overall score for each participant.
+This sum score can now be used in analyses and visualisations to correlate with other variables or compare between conditions.
+
+
+
+Recoding a Continuous Variable to Categories
+--------------------------------------------
+Often continuous variables are recoded into categories to create groups for comparison.
+Age is a common example of a continuous variable that is often recoded into categories such as Young Adults (18-29), Middle-Aged Adults (30-59), and Older Adults (60+).
+Below is an example of a data set with a column for Age:
+
+    .. list-table:: Data Pre-Recoding Age to Categories
+       :header-rows: 1
+
+       * - Age
+       * - 25
+       * - 18
+       * - 20
+       * - 35
+       * - 30
+       * - 45
+       * - 65
+       * - 62
+       * - 71
+
+To recode a continuous variable, like age, into categories click on a new column and choose `New Transformed Variable`.
+Next, choose the source variable to be the variable of interest (i.e. Age) and click on `Using transformation` and choose `Create New Transform...`:
+
+|ts_recode_age|
+
+Then click `Add recode condition` next to the blue plus sign and use the following cutoffs to recode Age into categories:
+
+|ts_recode_age_thresholds|
+
+In the transformation editor, you can set up the recoding logic using conditions such as:
+
+  - If Age < 30, then assign "Young"
+  - If Age < 50, then assign "Middle-Aged"
+  - Else, assign "Older"
+
+This works because the conditions are evaluated in order. For example:
+
+* Any value less than 30 will be assigned "Young" (so ages 18–29).
+* For values not less than 30, the next condition is checked: if Age < 50, assign "Middle-Aged" (so ages 30–49).
+* Any value not meeting the previous conditions (i.e., 50 and above) will be assigned "Older" by the final else statement.
+
+This approach allows you to create non-overlapping, ordered Age categories using simple less-than conditions and a final catch-all else.
+
+A new column will appear next to the data, with the recoded categories of Age (Young, Middle-Aged, and Older) based on the cutoffs specified in the transformation:
+
+    .. list-table:: Data Post-Recoding Age to Categories
+       :header-rows: 1
+
+       * - Age
+         - Age_Category
+       * - 25
+         - Young
+       * - 18
+         - Young
+       * - 20
+         - Young
+       * - 35
+         - Middle-Aged
+       * - 30
+         - Middle-Aged
+       * - 45
+         - Middle-Aged
+       * - 65
+         - Older
+       * - 62
+         - Older
+       * - 71
+         - Older
+
+This new categorical variable can now be used in analyses and visualisations to compare between Age groups.
+
+
+Recoding/Reducing the Number of Categories
+-------------------------------------------
+Often categorical variables have many categories, and it can be useful to recode or reduce the number of categories for more simple analysis or visualisation.
+Smoker status is a common example of this, smoker status could be either; Non-smoker, Occasional Smoker, Regular Smoker, or Heavy Smoker:
+
+    .. list-table:: Data Pre-Reducing Smoker Status to Categories
+       :header-rows: 1
+
+       * - Smoker_Status
+       * - Non-smoker
+       * - Occasional Smoker
+       * - Regular Smoker
+       * - Heavy Smoker
+
+For simplicity, reducing these categories to two: Non-smoker and Smoker can be useful for comparing between Smokers and Non-smokers.
+
+
+To reduce the number of categories, click on a new column and choose `New Transformed Variable`.
+Next, choose the source variable to be the variable of interest (i.e. Smoker_Status) and click on `Using transformation` and choose `Create New Transform...`.
+
+Non-smokers can be left as is, while the other categories can be combined into a single "Smoker" category.
+The following recoding logic can be applied to reduce the number of categories:
+
+|ts_reduce_smoker_status|
+
+A new column will appear next to the data, with the recoded categories of Smoker Status (Non-smoker and Smoker):
+
+    .. list-table:: Data Post-Reducing Smoker Status to Categories
+       :header-rows: 1
+
+       * - Smoker_Status
+         - Smoker_Status_Reduced
+       * - Non-smoker
+         - Non-smoker
+       * - Occasional Smoker
+         - Smoker
+       * - Regular Smoker
+         - Smoker
+       * - Heavy Smoker
+         - Smoker
+
+The new column of data, Smoker_Status_Reduced, can now be used in analyses and visualisations to compare between Smokers and Non-smokers.
+
+.. TODO
+
+..   - Excluding outliers *
+..   - Reverse scoring survey items *
+..   - Acquiescent response bias - LH IDEA
+..   - Computing a sum score (say an extraversion questionnaire) *
+..   - Attention checks - LH IDEA
+..   - Recoding a continuous variable to categories *
+..   - Recoding/reducing the number of categories
+..   - Split by functionality (jamovi does this poorly)
+..   - Analysing a subset of data
+..   - String concatenation
 
 Date Handling
 -------------
@@ -1011,5 +1375,22 @@ Composing a date from parts
 
 .. |ts_table_reorder_me| image:: /_images/ts_unordered_table.png
   :alt: The data editor in jamovi where you can reorder the levels in your variable to be more intuitive - currently they appear in an unusual order: Low, High, Medium.
+  :class: centered
+  :width: 42%
+
+
+.. |ts_recode_age| image:: /_images/ts_recode_cont_to_cat.png
+  :alt: the data editor in jamovi where you can begin to recode a continuous variable (age) into categories (Young, Middle-Aged, Older) but first must click source variable and Create New Transformed.
+  :class: centered
+  :width: 42%
+
+
+.. |ts_recode_age_thresholds| image:: /_images/ts_recode_filter_example.png
+  :alt: the data editor in jamovi where the continuous variable of age is recoded into categories Young, Middle-Aged, Older using thresholds of 18-29, 30-59, and 60+.
+  :class: centered
+  :width: 42%
+
+.. |ts_reduce_smoker_status| image:: /_images/ts_reduce_smoker_cat.png
+  :alt: the data editor in jamovi where the smoker status variable is reduced to fewer categories.
   :class: centered
   :width: 42%
