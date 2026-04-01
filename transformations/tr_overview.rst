@@ -942,35 +942,169 @@ Next click, using transformation and choose `Create New Transform...` and use th
 ``8 - $SOURCE``
 
 
-.. list-table:: Data Post-Reverse Scoring Survey Item
-   :header-rows: 1
+    .. list-table:: Data Post-Reverse Scoring Survey Item
+      :header-rows: 1
 
-   * - Item_1
-     - Item_2
-     - Item_3
-     - Item_3_Reverse_Scored
-   * - 4
-     - 3
-     - 3
-     - 4
-   * - 3
-     - 4
-     - 6
-     - 1
-   * - 4
-     - 4
-     - 2
-     - 5
+      * - Item_1
+        - Item_2
+        - Item_3
+        - Item_3_Reverse_Scored
+      * - 4
+        - 3
+        - 3
+        - 4
+      * - 3
+        - 4
+        - 6
+        - 1
+      * - 4
+        - 4
+        - 2
+        - 5
 
 Once applied the new column (Item_3_Reverse_Scored) will contain the reverse scored values (of Item_3), values of 1 become 7, values of 2 become 6, values of 3 become 5, and so on.
 Now higher scores on Item_3_Reverse_Scored indicate more of the construct being measured and lower scores indicate less of the construct being measured, which is consistent with the scoring of Item_1 and Item_2.
 This is a particularly important step to ensure that all items are scored in the same direction before computing a sum score or mean score across items, otherwise the resulting overall score may not accurately reflect the construct being measured.
 
-Acquiescent Response Bias
--------------------------
-How to remove/fix...
-*Insert info here***
+Attention Checks (with a Reverse Scored Item)
+---------------------------------------------
+Often two items in a survery (asking a similar question) where one is reverse worded and the other is not are used as an attention check, by comparing responses on both.
+Participants who fail to respond in a consistent way to these two items are likely not paying attention or responding in a biased way (e.g., acquiescent response bias, random response bias).
 
+For example, Item 1: “I never doubt my abilities.” and Item 2: “I often doubt my abilities.” should result in participants responding in a consistent way (i.e., if they strongly agree (5) with Item 1, they should also strongly disagree (1) with Item 2):
+
+    .. list-table:: Attention Check with Reverse Scoring Step 1.
+      :header-rows: 1
+
+      * - Item_1
+        - Item_2
+        - Item_2_Reverse_Scored
+      * - 5
+        - 1
+        - 5
+      * - 1
+        - 5
+        - 1
+      * - 1
+        - 2
+        - 3
+
+To check if participants are consistently responding to the two items, take the reverse scored version of Item_2 (Item_2_Reverse_Scored) and compare it to Item_1, the absolute difference between should be 0 if participants are responding in a consistent way, and any value greater than 0 indicates inconsistency in responses between the two items.
+
+To do this, first reverse score the item that is reverse worded (in this case Item_2) using the same method as described in the previous section.
+
+Next, in a blank column click `New Computed Variable` and use the following formula to compute the absolute difference between Item_1 and Item_2_Reverse_Scored:
+``ABS(Item_1 - Item_2_Reverse_Scored)``
+
+    .. list-table:: Attention Check with Reverse Scoring Step 2.
+       :header-rows: 1
+
+       * - Item_1
+         - Item_2
+         - Item_2_Reverse_Scored
+         - Absolute_Difference
+       * - 5
+         - 1
+         - 5
+         - 0
+       * - 1
+         - 5
+         - 1
+         - 0
+       * - 1
+         - 2
+         - 3
+         - 2
+
+
+Then under the data tab click `Filter`, here we can filter out paticipants who have an absolute difference greater than 0 by using the following filter expression:
+``Absolute_Difference == 0``
+
+    .. list-table:: Attention Check with Reverse Scoring Step 3.
+       :header-rows: 1
+
+       * - Filter 1
+         - Item_1
+         - Item_2
+         - Item_2_Reverse_Scored
+         - Absolute_Difference
+       * - ✔
+         - 5
+         - 1
+         - 5
+         - 0
+       * - ✔
+         - 1
+         - 5
+         - 1
+         - 0
+       * - ✘
+         - ...
+         - ...
+         - ...
+         - ...
+
+Any participants who did not respond consistenly are now removed from all analyses and visualisations and any only participants who responded in a consistent way to the attention check items are included in analyses and visualisations.
+
+
+Attention Checks (with a Single Item)
+---------------------------------------------
+Often a particular item can be used as an attention check, it may say "Please select ‘strongly disagree’ for this item".
+These items are designed to catch participants who are not paying attention or responding in a biased way (e.g., acquiescent response bias, random response bias).
+This is an impossible item to fail if participants are truly paying attention.
+
+Below are responses to several items of a survey, where item nine (Item_9_Attention_Check) is an attention check item that instructs participants to select '5' (or strongly agree) to indicate they are paying attention (from a possible 1-5 likert scale):
+
+    .. list-table:: Data Pre-Removing Response Bias Participants
+      :header-rows: 1
+
+      * - ID
+        - Item_1
+        - Item_2
+        - Item_9_Attention_Check
+      * - 1
+        - 3
+        - 3
+        - 5
+      * - 2
+        - 5
+        - 4
+        - 5
+      * - 3
+        - 4
+        - 4
+        - 4
+
+The last participant (ID 3) has failed the attention check by selecting Agree ('4') instead of Strongly Agree ('5') on the attention check item.
+
+In jamovi, to remove participants who fail the attention check, click on ``Filters`` near the filter icon and use the following filter expression:
+``Item_9_Attention_Check == 5``
+
+    .. list-table:: Data Pre-Removing Response Bias Participants
+      :header-rows: 1
+
+      * - Filter 1
+        - ID
+        - Item_1
+        - Item_2
+        - Item_9_Attention_Check
+      * - ✔
+        - 1
+        - 3
+        - 3
+        - 5
+      * - ✔
+        - 2
+        - 5
+        - 4
+        - 5
+      * - ✘
+        - ...
+        - ...
+        - ...
+        - ...
+
+Now, only the participants who have passed the attention check are included in analyses and visualisations and any participants who failed the attention check are removed.
 
 
 Sum Score of Survey Items
@@ -1085,7 +1219,7 @@ A new column will appear next to the data, with the recoded categories of Age (Y
        :header-rows: 1
 
        * - Age
-         - Age_Category
+         - Age_Categories
        * - 25
          - Young
        * - 18
@@ -1122,9 +1256,7 @@ Smoker status is a common example of this, smoker status could be either; Non-sm
        * - Regular Smoker
        * - Heavy Smoker
 
-For simplicity, reducing these categories to two: Non-smoker and Smoker can be useful for comparing between Smokers and Non-smokers.
-
-
+Reducing these categories to two, Non-smoker and Smoker, can be useful for simple comparisons between Smokers and Non-smokers.
 To reduce the number of categories, click on a new column and choose `New Transformed Variable`.
 Next, choose the source variable to be the variable of interest (i.e. Smoker_Status) and click on `Using transformation` and choose `Create New Transform...`.
 
@@ -1151,18 +1283,204 @@ A new column will appear next to the data, with the recoded categories of Smoker
 
 The new column of data, Smoker_Status_Reduced, can now be used in analyses and visualisations to compare between Smokers and Non-smokers.
 
-.. TODO
 
+Analysing a Subset of Data
+---------------------------
+At times only a subset of data is needed for an analysis, it may be useful to restrict the data to a subset of interest.
+
+jamovi has two options for analysing a subset of data:
+1. Create a new column of data that contains only the values of interest (and missing values for other rows) - which is most useful if the other subset of data is still needed for other analyses.
+2. Apply a `Filter` to restrict the data to only the rows of interest - which is best used if the other subset of data can be excluded from all analyses.
+
+Below is an example of a data set with three variables, Region, Education Level, and Total Survey Score:
+
+    .. list-table:: Data Pre-Filtering to Analyse a Subset of Data
+       :header-rows: 1
+
+       * - Region
+         - Education Level
+         - Total Survey Score
+       * - North America
+         - High School
+         - 15
+       * - North America
+         - University
+         - 20
+       * - Europe
+         - High School
+         - 10
+       * - Europe
+         - University
+         - 25
+       * - North America
+         - High School
+         - 12
+       * - Europe
+         - University
+         - 22
+
+Perhaps there is interest in comparing the Total Survey Score of participants between Education Levels, but only for participants from North America (and exclude any from Europe).
+
+If creating a new column (option 1) is most ideal, click on a new column and choose `New Computed Variable`, give it a name (e.g., `Total_Survey_Score_NorthAm`) and use the following formula:
+``FILTER(`Total Survey Score`, Region == 'North America')``
+
+The new data column (`Total_Survey_Score_NorthAm``) contains Total Survey Scores only for participants from North America, with missing values assigned to participants from other countries, allowing it to be used in analyses and visualisations comparing Education Levels among North American participants while excluding participants from Europe:
+
+    .. list-table:: Data Post-Filtering to Analyse a Subset of Data (Option 1)
+       :header-rows: 1
+
+       * - Region
+         - Education Level
+         - Total Survey Score
+         - Total_Survey_Score_NorthAm
+       * - North America
+         - High School
+         - 15
+         - 15
+       * - North America
+         - University
+         - 20
+         - 20
+       * - Europe
+         - High School
+         - 10
+         -
+       * - Europe
+         - University
+         - 25
+         -
+       * - North America
+         - High School
+         - 12
+         - 12
+       * - Europe
+         - University
+         - 22
+         -
+
+If applying a filter (option 2) to the overall data set is best suited, click on the data tab and select `Filters` under the filter icon, then use the following expression:
+``Region == 'North America'``
+
+    .. list-table:: Data Post-Filtering to Analyse a Subset of Data (Option 2)
+       :header-rows: 1
+
+       * - Filter 1
+         - Region
+         - Education Level
+         - Total Survey Score
+       * - ✔
+         - North America
+         - High School
+         - 15
+       * - ✔
+         - North America
+         - University
+         - 20
+       * - ✘
+         - ...
+         - ...
+         - ...
+       * - ✘
+         - ...
+         - ...
+         - ...
+       * - ✔
+         - North America
+         - High School
+         - 12
+       * - ✘
+         - ...
+         - ...
+         - ...
+
+A new column will appear with ticks to indicate which rows are included and crosses to indicate which rows are excluded.
+jamovi will now only consider participants from North America (or rather rows with ticks) for any analyses and visualisations.
+
+String Concatenation
+--------------------
+String concatenation is the process of joining two or more strings of text together to create a new string.
+Categorical variables are often represented as strings of text, and sometimes it can be useful to combine information from multiple categorical variables into a single variable.
+
+For example, here are two variables Condition and Time:
+
+    .. list-table:: Pre-String Concatenation Example
+       :header-rows: 1
+
+       * - Participant_ID
+         - Condition
+         - Time
+       * - 1
+         - Control
+         - Pre
+       * - 1
+         - Control
+         - Post
+       * - 2
+         - Therapy
+         - Pre
+       * - 2
+         - Therapy
+         - Post
+       * - 3
+         - Control
+         - Pre
+       * - 3
+         - Therapy
+         - Post
+
+Combining the information from both Condition and Time can be a simple way to represent the different conditions and time points in a single variable.
+
+To do this, click on a new column and choose `New Computed Variable`, give it a name (e.g., `Condition_Time`) and use the following formula:
+``Condition + '_' + Time``
+
+
+    .. list-table:: Post-String Concatenation Example
+       :header-rows: 1
+
+       * - Participant_ID
+         - Condition
+         - Time
+         - Condition_Time
+       * - 1
+         - Control
+         - Pre
+         - Control_Pre
+       * - 1
+         - Control
+         - Post
+         - Control_Post
+       * - 2
+         - Therapy
+         - Pre
+         - Therapy_Pre
+       * - 2
+         - Therapy
+         - Post
+         - Therapy_Post
+       * - 3
+         - Control
+         - Pre
+         - Control_Pre
+       * - 3
+         - Therapy
+         - Post
+         - Therapy_Post
+
+The new Condition_Time variable contains the combined information from both Condition and Time, with an underscore used to separate the two pieces of information (note this underscore can be excluded if desired).
+This new variable can now be used in analyses and visualisations to compare between the different conditions and time points in a more simple way than having to consider both Condition and Time separately.
+
+
+.. TODO
 ..   - Excluding outliers *
 ..   - Reverse scoring survey items *
-..   - Acquiescent response bias - LH IDEA
 ..   - Computing a sum score (say an extraversion questionnaire) *
-..   - Attention checks - LH IDEA
 ..   - Recoding a continuous variable to categories *
-..   - Recoding/reducing the number of categories
+..   - Recoding/reducing the number of categories *
+..   - Analysing a subset of data *
+..   - String concatenation *
 ..   - Split by functionality (jamovi does this poorly)
-..   - Analysing a subset of data
-..   - String concatenation
+..   - Attention checks - LH IDEA
+..   - Acquiescent response bias - LH IDEA
 
 Date Handling
 -------------
