@@ -966,9 +966,10 @@ Once applied the new column (Item_3_Reverse_Scored) will contain the reverse sco
 Now higher scores on Item_3_Reverse_Scored indicate more of the construct being measured and lower scores indicate less of the construct being measured, which is consistent with the scoring of Item_1 and Item_2.
 This is a particularly important step to ensure that all items are scored in the same direction before computing a sum score or mean score across items, otherwise the resulting overall score may not accurately reflect the construct being measured.
 
-Attention Checks (with a Reverse Scored Item)
+Attention Checks with a Reverse Scored Item
 ---------------------------------------------
-Often two items in a survery (asking a similar question) where one is reverse worded and the other is not are used as an attention check, by comparing responses on both.
+
+Often two items in a survery that ask a similar question but are worded in opposite directions, one is reverse worded and the other is not, can be used as an attention check by comparing responses on both.
 Participants who fail to respond in a consistent way to these two items are likely not paying attention or responding in a biased way (e.g., acquiescent response bias, random response bias).
 
 For example, Item 1: “I never doubt my abilities.” and Item 2: “I often doubt my abilities.” should result in participants responding in a consistent way (i.e., if they strongly agree (5) with Item 1, they should also strongly disagree (1) with Item 2):
@@ -1044,10 +1045,10 @@ Then under the data tab click `Filter`, here we can filter out paticipants who h
          - ...
          - ...
 
-Any participants who did not respond consistenly are now removed from all analyses and visualisations and any only participants who responded in a consistent way to the attention check items are included in analyses and visualisations.
+Any participants who did not respond consistenly are now removed and any only participants who responded in a consistent way to the attention check items are included in analyses and visualisations.
 
 
-Attention Checks (with a Single Item)
+Attention Checks with a Single Item
 ---------------------------------------------
 Often a particular item can be used as an attention check, it may say "Please select ‘strongly disagree’ for this item".
 These items are designed to catch participants who are not paying attention or responding in a biased way (e.g., acquiescent response bias, random response bias).
@@ -1104,11 +1105,11 @@ In jamovi, to remove participants who fail the attention check, click on ``Filte
         - ...
         - ...
 
-Now, only the participants who have passed the attention check are included in analyses and visualisations and any participants who failed the attention check are removed.
+Now, only the participants who have passed the attention check are included and any participants who failed the attention check are removed.
 
 
-Sum Score of Survey Items
--------------------------
+Summation (or Total) Score of Survey Items
+------------------------------------------
 Sum scores are often computed across multiple items of survey responses to create an overall score for a construct being measured, often to correlate with other variables or compare between conditions.
 For example, personality questionnaires use multiple items to measure a single personality trait - such as Extraversion.
 By computing a sum score across those survey items, an overall score (in this case Extraversion Score) can be created for each participant (see `here <https://doi.org/10.1016/j.jrp.2006.02.001>`__  for more info on personality scales).
@@ -1167,7 +1168,6 @@ By using the SUM() function and choosing the variables (or rather items) of inte
 
 As shown above, the new column (Extraversion_Sum_Score) contains the sum score across the items (of Extraversion) with each row indicating the overall score for each participant.
 This sum score can now be used in analyses and visualisations to correlate with other variables or compare between conditions.
-
 
 
 Recoding a Continuous Variable to Categories
@@ -1284,13 +1284,12 @@ A new column will appear next to the data, with the recoded categories of Smoker
 The new column of data, Smoker_Status_Reduced, can now be used in analyses and visualisations to compare between Smokers and Non-smokers.
 
 
-Analysing a Subset of Data
----------------------------
+Restricting Analyses to a Subset of Data
+-----------------------------------------
 At times only a subset of data is needed for an analysis, it may be useful to restrict the data to a subset of interest.
+In jamovi to restrict any analyses to a single group this is as simple as applying a `Filter`.
 
-jamovi has two options for analysing a subset of data:
-1. Create a new column of data that contains only the values of interest (and missing values for other rows) - which is most useful if the other subset of data is still needed for other analyses.
-2. Apply a `Filter` to restrict the data to only the rows of interest - which is best used if the other subset of data can be excluded from all analyses.
+A Filter can be used to restrict the data to only the rows of interest - which is best used if the other subset of data is of no interest and can be excluded from all analyses (see the following section if interested in keeping subsets and splitting output via categories).
 
 Below is an example of a data set with three variables, Region, Education Level, and Total Survey Score:
 
@@ -1321,44 +1320,7 @@ Below is an example of a data set with three variables, Region, Education Level,
 
 Perhaps there is interest in comparing the Total Survey Score of participants between Education Levels, but only for participants from North America (and exclude any from Europe).
 
-If creating a new column (option 1) is most ideal, click on a new column and choose `New Computed Variable`, give it a name (e.g., `Total_Survey_Score_NorthAm`) and use the following formula:
-``FILTER(`Total Survey Score`, Region == 'North America')``
-
-The new data column (`Total_Survey_Score_NorthAm``) contains Total Survey Scores only for participants from North America, with missing values assigned to participants from other countries, allowing it to be used in analyses and visualisations comparing Education Levels among North American participants while excluding participants from Europe:
-
-    .. list-table:: Data Post-Filtering to Analyse a Subset of Data (Option 1)
-       :header-rows: 1
-
-       * - Region
-         - Education Level
-         - Total Survey Score
-         - Total_Survey_Score_NorthAm
-       * - North America
-         - High School
-         - 15
-         - 15
-       * - North America
-         - University
-         - 20
-         - 20
-       * - Europe
-         - High School
-         - 10
-         -
-       * - Europe
-         - University
-         - 25
-         -
-       * - North America
-         - High School
-         - 12
-         - 12
-       * - Europe
-         - University
-         - 22
-         -
-
-If applying a filter (option 2) to the overall data set is best suited, click on the data tab and select `Filters` under the filter icon, then use the following expression:
+To do so, a filter (option 2) to the overall data set is best suited, click on the data tab and select `Filters` under the filter icon, then use the following expression:
 ``Region == 'North America'``
 
     .. list-table:: Data Post-Filtering to Analyse a Subset of Data (Option 2)
@@ -1395,6 +1357,136 @@ If applying a filter (option 2) to the overall data set is best suited, click on
 
 A new column will appear with ticks to indicate which rows are included and crosses to indicate which rows are excluded.
 jamovi will now only consider participants from North America (or rather rows with ticks) for any analyses and visualisations.
+
+
+Anlaysing Subsets of Data (AKA Split File)
+--------------------------------------------
+It can be useful to analyse two or more subsets of data separately, this is often referred to as a `Split File` in other statistical software.
+
+Below is an example of a data set with three variables, Region, Education Level, and Total Survey Score.
+    .. list-table:: Data Pre-Filtering to Analyse a Subset of Data
+       :header-rows: 1
+
+       * - Region
+         - Education Level
+         - Total Survey Score
+       * - North America
+         - High School
+         - 15
+       * - North America
+         - University
+         - 20
+       * - Europe
+         - High School
+         - 10
+       * - Europe
+         - University
+         - 25
+       * - North America
+         - High School
+         - 12
+       * - Europe
+         - University
+         - 22
+
+Perhaps there is interest in comparing the Total Survey Score of participants between Education Levels, but want to analyse or rather split output via geographical location North America and Europe separately.
+Such data handling can be achieved in jamovi, although currently there is a lack of simple functionality to split the output of analyses by a category and requires a somewhat round about approach to achieve this.
+
+To begin, two New Computed Variables need to be created.
+The first must filter to only include participants from North America.
+To do this, click on a new column and choose `New Computed Variable`, give it a name (e.g., `Total_Survey_Score_NorthAm`) and use the following formula:
+``FILTER(`Total Survey Score`, Region == 'North America')``
+
+The new data column (`Total_Survey_Score_NorthAm``) contains Total Survey Scores only for participants from North America, with missing values assigned to participants from other countries, allowing it to be used in analyses and visualisations comparing Education Levels among North American participants while excluding participants from Europe:
+
+    .. list-table:: Data Mid-Filtering to Analyse Subsets of Data
+       :header-rows: 1
+
+       * - Region
+         - Education Level
+         - Total Survey Score
+         - Total_Survey_Score_NorthAm
+       * - North America
+         - High School
+         - 15
+         - 15
+       * - North America
+         - University
+         - 20
+         - 20
+       * - Europe
+         - High School
+         - 10
+         -
+       * - Europe
+         - University
+         - 25
+         -
+       * - North America
+         - High School
+         - 12
+         - 12
+       * - Europe
+         - University
+         - 22
+         -
+
+
+
+The second New Computed Variable must filter to only include participants from Europe.
+To do this, click on a new column and choose `New Computed Variable`, give it a name (e.g., `Total_Survey_Score_Europe`) and use the following formula:
+``FILTER(`Total Survey Score`, Region == 'Europe')``
+
+    .. list-table:: Data Post-Filtering to Analyse Subsets of Data
+       :header-rows: 1
+
+       * - Region
+         - Education Level
+         - Total Survey Score
+         - Total_Survey_Score_NorthAm
+         - Total_Survey_Score_Europe
+       * - North America
+         - High School
+         - 15
+         - 15
+         -
+       * - North America
+         - University
+         - 20
+         - 20
+         -
+       * - Europe
+         - High School
+         - 10
+         -
+         - 10
+       * - Europe
+         - University
+         - 25
+         -
+         - 25
+       * - North America
+         - High School
+         - 12
+         - 12
+         -
+       * - Europe
+         - University
+         - 22
+         -
+         - 22
+
+
+Using the new columns of data (Total_Survey_Score_NorthAm and Total_Survey_Score_Europe), the same analyses can be run to compare between Education Levels for participants from North America and Europe separately using the respective columns of data.
+
+
+
+
+
+
+
+
+
 
 String Concatenation
 --------------------
@@ -1470,6 +1562,9 @@ The new Condition_Time variable contains the combined information from both Cond
 This new variable can now be used in analyses and visualisations to compare between the different conditions and time points in a more simple way than having to consider both Condition and Time separately.
 
 
+
+
+
 .. TODO
 ..   - Excluding outliers *
 ..   - Reverse scoring survey items *
@@ -1478,9 +1573,9 @@ This new variable can now be used in analyses and visualisations to compare betw
 ..   - Recoding/reducing the number of categories *
 ..   - Analysing a subset of data *
 ..   - String concatenation *
-..   - Split by functionality (jamovi does this poorly)
-..   - Attention checks - LH IDEA
-..   - Acquiescent response bias - LH IDEA
+..   - Split by functionality (jamovi does this poorly) poor mans splits
+
+..   - Attention checks *
 
 Date Handling
 -------------
