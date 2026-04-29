@@ -30,11 +30,19 @@
    analyses/jg_overview
 
 .. toctree::
-   :caption: Manipulate and Transform Data
+   :caption: Data Handling
    :maxdepth: 1
    :hidden:
- 
-   transformations/tr_overview
+
+   transformations/tm_1_overview_data_variables
+   transformations/tm_2_computed_variables
+   transformations/tm_3_transformed_variables
+   transformations/tm_4_row_v_functions
+   transformations/tm_5_list_of_functions
+   transformations/tm_6_filtering_data
+   transformations/tm_7_restructure_data
+   transformations/tm_8_common_data_recipes
+
 
 .. toctree::
    :caption: How to…
