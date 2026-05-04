@@ -1,11 +1,16 @@
 .. sectionauthor:: Laiton Hedley
 
+
+
+.. _transformed-variables:
+
 =====================
 Transformed Variables
 =====================
 
     ``Transformed variables`` are better suited for more complex transformations (such as reverse scoring and recoding variables) and allow the same transform to be applied across multiple columns of data.
-    To add a new transformed variable to a data set, select the ``Add`` (variable) button from the ``Data`` tab.  Under ``Transformed Variable`` select ``Append``, this will add a new Transformed column to the very right of the data set. To configure the Transformed variable, select either ``Setup`` from the ``Data`` tab, or double click on the column header. By doing so, the following variable editor will appear:
+    To add a new transformed variable to a data set, select the ``Add`` (variable) button from the ``Data`` tab.  Under ``Transformed Variable`` select ``Append``, this will add a new Transformed column to the very right of the data set.
+    To configure the Transformed variable, select either ``Setup`` from the ``Data`` tab, or double click on the column header. By doing so, the following variable editor will appear:
 
     |Transformed_Variable|
 
@@ -77,7 +82,7 @@ Recoding Variables
 Transforming Multiple Variables
 -------------------------------
 
-There are situations where multiple varibles need to be transformed. For example, there may be a number of items in a survey data set which need to be reverse scored.
+There are situations where multiple variables need to be transformed. For example, there may be a number of items in a survey data set which need to be reverse scored.
 Instead of recoding each item, one at a time, jamovi conveniently allows for the same transformation to be applied in a single step.
 
 In this approach, select the variables to transform (either by holding down ctrl or ⌘ and clicking the colum headers, or selecting multiple variables under the ``Variables`` tab), and then select ``Transform`` from the ``Data`` tab. For each variable selected, a matching transformed variable will created, with the ``Source variable`` set accordingly. This allows you to define a single transform, and apply it across multiple variables at once.

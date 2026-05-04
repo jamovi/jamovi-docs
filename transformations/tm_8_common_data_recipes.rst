@@ -1,6 +1,8 @@
 .. sectionauthor:: Laiton Hedley
 
 
+.. _common-data-recipes:
+
 ===================
 Common Data Recipes
 ===================
@@ -11,7 +13,7 @@ This section provides common data recipes for handling and transforming data in 
 Excluding Outliers (IQR)
 ------------------------
 
-Two common approaches for identifying and removing outliers are the IQR method and the Z-score method.
+Two common approaches for identifying and removing outliers are the IQR method and the z-score method.
 
 For the IQR method, values that are greater than 1.5 times the interquartile range (IQR) above the third quartile or below the first quartile are considered outliers (of course more strict or lenient thresholds can be applied).
 Any values outside this range should be filtered out of an analysis, see `here <https://en.wikipedia.org/wiki/Interquartile_range#Outliers>`__ for more info.
@@ -72,11 +74,11 @@ As shown above, the filter has excluded the two outliers (15 and 98) with an add
 Only the non-outlier values (68, 66, 70, etc.) are included in analyses and visualisations, as indicated by ticks in the first column above.
 
 
-Excluding Outliers (Z-Score)
+Excluding Outliers (z-score)
 ----------------------------
-For the Z-score method, often values that have a z-score +/- 3 are considered outliers and removed for analyses (more lenient or strict thresholds can be applied).
+For the z-score method, often values that have a z-score +/- 3 are considered outliers and removed for analyses (more lenient or strict thresholds can be applied).
 
-For example, below is a data set with a column for Memory Score Performance and another for the Absolute Z-Score of the Memory Score Performance variable.
+For example, below is a data set with a column for Memory Score Performance and another for the Absolute z-score of the Memory Score Performance variable.
 
     .. list-table:: Memory Scores Pre Filtering (ABSZ) for Outliers
       :header-rows: 1
@@ -97,7 +99,7 @@ For example, below is a data set with a column for Memory Score Performance and 
         - 3.43
 
 
-The last two rows of the data show outlier values of 15 and 98 for Memory Score Performance, which have Absolute Z-Score values of 3.01 and 3.43 respectively, indicating that they are outliers and should be filtered out of analyses.
+The last two rows of the data show outlier values of 15 and 98 for Memory Score Performance, which have Absolute z-score values of 3.01 and 3.43 respectively, indicating that they are outliers and should be filtered out of analyses.
 To exclude the rows with outliers, the following filter can be used:
 ``ABSZ(Memory_Score)<3``
 

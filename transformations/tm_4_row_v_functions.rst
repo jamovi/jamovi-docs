@@ -6,6 +6,7 @@ Row and V Functions
 ===================
 
 Functions in jamovi can be either *Row functions* or *Variable functions*.
+As their names imply Row functions only make use of other values in the same row, whereas Variable functions (typically prefixed with the letter ``V``) compute values using the entire variable (or rather column).
 
 Row Functions
 -------------

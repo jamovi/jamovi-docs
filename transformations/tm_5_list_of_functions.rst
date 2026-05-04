@@ -7,6 +7,10 @@
 ⚡ List of Functions
 ====================
 
+Below is a list of functions available in jamovi.
+These functions can be used in the formula editor to create new variables, filter data, and perform a variety of transformations on existing data.
+
+
 .. https://github.com/jamovi/jamovi/blob/4b490813d1442f93059e606a15ac39ef626c6d07/client/main/vareditor/formulatoolbar.ts#L89-L168
 
 .. list-table:: Functions available in jamovi
@@ -164,19 +168,19 @@
      -
    * - ``DATEVALUE(var)``
      - Takes a date in text format (i.e. 2000-12-20) and converts to the number of days since the 1st of January, 1970.
-     -
+     - `More info <https://en.wikipedia.org/wiki/Unix_time>`__
    * - ``DATE(var)``
      - Takes a number representing the number of days since the 1st of January 1970, and produces a formatted date.
-     -
+     - `More info <https://en.wikipedia.org/wiki/Unix_time>`__
    * -
      - **REFERENCE FUNCTIONS**
      -
    * - ``HLOOKUP(index, var_1, var_2, ...)``
      - Returns the values in the rows, specified by index, from the provided variables.
-     -
+     - `More info <https://en.wikipedia.org/wiki/Lookup_table>`__
    * - ``MATCH(var, value_1, value_2, ...)``
      - Returns the row index of the variable of interest that matches the value provided.
-     -
+     - `More info <https://en.wikipedia.org/wiki/Lookup_table>`__
    * -
      - **MISC. FUNCTIONS**
      -
@@ -185,36 +189,36 @@
      - `More info <https://en.wikipedia.org/wiki/Counting>`__
    * - ``FILTER(var, filter expression)``
      - Filters a variable using a filter expression. For example, ``FILTER(var_1, var_2 == "Group_A")`` returns only rows in var_1 where var_2 is matched with the label "Group A".
-     - `More info <https://blog.jamovi.org/2018/04/25/jamovi-filters.html>`__
+     - `More info <https://en.wikipedia.org/wiki/Filter_(higher-order_function)>`__
    * - ``INT(var)``
-     - Converts a number to an integer.
+     - Converts a number to an integer (a positive or negative number without a fractional component).
      - `More info <https://en.wikipedia.org/wiki/Integer>`__
    * - ``OFFSET(var, n)``
      - Offsets a column of data up or down by +/- n rows
      - `More info <https://en.wikipedia.org/wiki/Offset_(computer_science)>`__
    * - ``ROW()``
      - Returns a column with each row indicating the row number.
-     - `More info <https://en.wikipedia.org/wiki/Row_and_column>`__
+     -
    * - ``SAMPLE(var, n)``
      - Draws a random sample of n values from a variable.
      - `More info <https://en.wikipedia.org/wiki/Sampling_(statistics)>`__
    * - ``VROWS(var)``
      - Returns the number of rows of a variable.
-     - `More info <https://en.wikipedia.org/wiki/Row_and_column>`__
+     -
    * -
      - **SIMULATION FUNCTIONS**
      -
    * - ``BETA()``
-     - Draws samples from a Beta distribution.
+     - Draws samples from a Beta distribution, using the parameters alpha (proportional successes) and beta (proportional failures).
      - `More info <https://en.wikipedia.org/wiki/Beta_distribution>`__
    * - ``GAMMA()``
-     - Draws samples from a Gamma distribution.
+     - Draws samples from a Gamma distribution, using the parameters shape (skewness) and scale (spread of data).
      - `More info <https://en.wikipedia.org/wiki/Gamma_distribution>`__
    * - ``NORM()``
-     - Draws samples from a Normal (Gaussian) distribution.
+     - Draws samples from a Normal (Gaussian) distribution, using the mean (center of the distribution) and standard deviation (spread of the distribution).
      - `More info <https://en.wikipedia.org/wiki/Normal_distribution>`__
    * - ``UNIF()``
-     - Draws samples from a Uniform distribution.
+     - Draws samples from a Uniform distribution, providing a minimum value and a maximum value.
      - `More info <https://en.wikipedia.org/wiki/Uniform_distribution_(continuous)>`__
 
 
@@ -226,9 +230,8 @@ Understanding Formulas
   Variables are referred to by their name (i.e. variable_name) and can be referred to with backticks as well (i.e. \`variable name\`) - when the variable name contains spaces it is a requirement to use backticks otherwise jamovi will not be able to interpret the formula correctly.
 
   Often we use strings of text in our rows of data to indicate categories or conditions.
-  In jamovi, adding two text values together performs concatenation or rather joins them together (i.e. hello + world = helloworld)
+  In jamovi, adding two text values together performs concatenation or rather joins them together (i.e. hello + world = helloworld).
   Adding numbers and strings of text together, again performs concatenation where by the number is converted to text alogside the string of text (i.e. 2 + apples = 2apples).
+  Values surrounded by ticks are strings of text (i.e. \'10\').
 
-  When using formulas often we may wish to use ``and`` and ``or``  when performing are logical operations (i.e. ``IF(var_1 > 5 and var_2 < 10, 'Yes', 'No')`` and ``IF(var_1 == 'A' or var_2 == 'B', 'Match', 'No Match')``)
-
-  values surrounded by ticks are strings of text (i.e. \'10\')
+  When using formulas often we may wish to use ``and`` and ``or``  when performing are logical operations (i.e. ``IF(var_1 > 5 and var_2 < 10, 'Yes', 'No')`` and ``IF(var_1 == 'A' or var_2 == 'B', 'Match', 'No Match')``).

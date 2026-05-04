@@ -23,9 +23,10 @@ Computed Variables
 
     Here the new column can be named and given a description. Selecting the small fx button will bring down a list of the functions available and the list of variables (these can be inserted by double-clicking them). It's also possible to construct a formula by simply typing directly into the formula box.
 
-    A number of functions are available. See :ref:`list-of-functions` for details.
+    A number of functions are available in jamovi, see the :ref:`list-of-functions` for details.
 
     Computed variables are ideal for one-off computations, but where the same computation needs to be applied many times across many columns (For example, reverse scoring a number of responses), creating a computed variable for each column becomes tedious. In contrast, ``Transformed variables`` allow for the same transform to be applied across any number of columns. Further, transformed variables are ideal for "if-then" recoding of variables.
+    See the :ref:`transformed-variables` documentation for more details.
 
 
 .. |computed_screenshot| image:: ../_images/tr_compute_variable.png

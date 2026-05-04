@@ -6,7 +6,10 @@ Overview
 
     When analysing data, it is common for data to come in in a somewhat messy format. It's often necessary to "tidy" and transform our data so that it is in a form suitable for our analyses. This may involve computing sum scores for each partipant, excluding outliers, recoding responses, transforming response variables to different scales, aggregation (such as computing mean response time for each participant), etc.
 
-    When raw data is first brought or entered into jamovi, it is represented in columns called *Data Variables*. This data can be analysed as-is, but it's also possible to alter, recode and transform this data using *Computed Variables* and *Transformed Variables*. The fourth and final sort of column is *Filters*, used for filtering data such as outliers.
+    When raw data is first brought or entered into jamovi, it is represented in columns called :ref:`Data Variables <data-variables>`. This data can be analysed as-is, but it's also possible to alter, recode and transform this data using :ref:`Computed Variables <computed-variables>` and :ref:`Transformed Variables <transformed-variables>`. The fourth and final sort of column is :ref:`Filters <filtering-data>`, used for filtering via categories or excluding outliers.
+
+
+.. _data-variables:
 
 ==============
 Data Variables
@@ -25,7 +28,7 @@ Measure and Data Types
       - Decimal: numbers with decimal points
       - Text: text, words, or "strings" that make up words or categories.
 
-    Note that jamovi does not support date and time data types at this time, however dates and times can be represented as text. Some basic date manipulations are described in Common Recipes *link* TODO.
+    Note that jamovi does not support date and time data types at this time, however dates and times can be represented as text. Some basic date manipulations are described in :ref:`Common Data Recipes <common-data-recipes>`.
 
     Measure types are used to indicate the `level of measurement <https://en.wikipedia.org/wiki/Level_of_measurement>`__.
 
@@ -64,7 +67,7 @@ Missing Values
 
     Some data sets use special values to encode missing values, for example, they may use the value -99 or 9999. This data, left as-is, will be treated by analyses as actual values. In order for these to be treated as missing values, it's necessary to instruct jamovi to treat these values as missing.
 
-    With variable editor open, click on ``Missing values`` and a window will appear, click the ``Add Missing Value`` button.     Now, it is possible to specify when the source or rather the variable of interest has a value exactly, equal to, less than, or greater than a value, it should be treated as a missing value.
+    With variable editor open, click on ``Missing values`` and a window will appear, click the ``Add Missing Value`` button. Now, it is possible to specify when the source or rather the variable of interest has a value exactly, equal to, less than, or greater than a value, it should be treated as a missing value.
 
     For example, the formula of ``== 9999`` shown below means that any values equal to 9999 will be treated as missing values.
 
@@ -174,12 +177,49 @@ Reordering Levels
           - 54.3
           - 9.1
 
-    The natural order of the conditions is now preserved, moving down each row it appears a Low, Medium, then High, making the table easier to read and interpret.
+    The natural order of the conditions is now preserved, moving down each row it appears in the order of Low, Medium, then High, making the table easier to read and interpret.
 
 
+Retain Unused Levels in Analyses
+---------------------------------
+    Some categorical variables have valid levels that do not appear in the current data set. These unused levels may still be meaningful and can be retained for analysis or reporting.
+    For example, a survey may ask adult and child moviegoers whether they enjoyed a film, with responses of Yes or No.
+    If all participants answer Yes, the No level is absent from the data (even though it remains a valid response option):
 
+      .. list-table:: Example of a Data with an Unused Level
+        :header-rows: 1
 
-  .. - TODO 'Retain unused levels in analyses' LH: Come back and finish this section.... This is a setting in the variable editor that allows for the retention of unused levels in analyses. For example, if there are three levels of a variable (e.g., Low, Medium, High), but only two of these levels are present in the data (e.g., Low and High), this setting allows for the retention of the unused level (Medium) in analyses. This can be useful for ensuring that all levels of a variable are represented in analyses, even if some levels are not present in the data.....
+        * - Age Group:
+          - Enjoyed Film (Y/N):
+        * - Adult
+          - Yes
+        * - Adult
+          - Yes
+        * - Adult
+          - Yes
+        * - Child
+          - Yes
+        * - Child
+          - Yes
+        * - Child
+          - Yes
+
+    If a contingency table was used to examine the relationship between Age Group and Film Enjoyment, there is a problem because "No" responses are absent from the data.
+    Without this in our data the contingency table would not be able to represent the missing ("No") level of the variable.
+
+    To ensure this level is retained in analyses, first the unused level (e.g., "No") must be added to the variable editor for the variable of interest (e.g., Enjoyed Film (Y/N)) by double clicking in the heading of the variable or clicking a cell of the variable the variable editor will appear and with a plus sign towards the bottom of the variable editor:
+
+    |ts_unused_level|
+
+    Click the plus sign to add the unused level (of "No") in the variable editor and entering the text for the unused level:
+
+    |ts_unused_level_part_two|
+
+    The unused level (of "No") is included as a level for the variable of interest (Enjoyed Film (Y/N)), but it is not yet retained in analyses. To retain this level in analyses, click the toggle on button next to the text: "Retain unused levels in analyses" option:
+
+    |ts_retain_unused_level|
+
+    Now, when performing analyses, the "No" level will be retained in analyses and represented in tables and figures, even though there is an absence of "No" responses in the data.
 
 
 .. |continuous_icon| image:: /_images/variable-continuous.svg
@@ -234,5 +274,23 @@ Reordering Levels
 
 .. |ts_table_reorder_me| image:: /_images/ts_unordered_table.png
   :alt: The data editor in jamovi where you can reorder the levels in your variable to be more intuitive - currently they appear in an unusual order: Low, High, Medium.
+  :class: centered
+  :width: 42%
+
+
+.. |ts_unused_level| image:: /_images/ts_add_unused_level.png
+  :alt: The data editor in jamovi where to add unused levels to be retained in analyses, even if they are not present in the data.
+  :class: centered
+  :width: 42%
+
+
+.. |ts_unused_level_part_two| image:: /_images/ts_add_unused_level_part_2.png
+  :alt: The data editor in jamovi where to add the text for the unused levels to be retained in analyses, even if they are not present in the data.
+  :class: centered
+  :width: 42%
+
+
+.. |ts_retain_unused_level| image:: /_images/ts_retain_unused_level.png
+  :alt: The data editor in jamovi where to add the text for the unused levels to be retained in analyses, even if they are not present in the data.
   :class: centered
   :width: 42%
