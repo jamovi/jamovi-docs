@@ -29,13 +29,28 @@
 
    analyses/jg_overview
 
+.. toctree::
+   :caption: Data Handling
+   :maxdepth: 1
+   :hidden:
+
+   data/data_overview
+   data/data_1_overview_data_variables
+   data/data_2_computed_variables
+   data/data_3_transformed_variables
+   data/data_6_filtering_data
+   data/data_4_row_v_functions
+   data/data_5_list_of_functions
+   data/data_7_restructure_data
+   data/data_8_common_data_recipes
+   data/data_9_date_handling
+
 
 .. toctree::
    :caption: How to…
    :hidden:
 
    howto/howto_overview
-
 
 .. toctree::
    :caption: Developer hub
